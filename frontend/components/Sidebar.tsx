@@ -16,9 +16,9 @@ import { motion } from "framer-motion";
 
 const navItems = [
   { name: "Platform Home", icon: LayoutDashboard, href: "/" },
-  { name: "Industry Hub", icon: Layers, href: "/" },
   { name: "Market Signals", icon: TrendingUp, href: "/signals" },
   { name: "Intelligence RAG", icon: Database, href: "/rag" },
+  { name: "Reports", icon: FileText, href: "/reports" },
 ];
 
 export default function Sidebar() {
@@ -36,7 +36,9 @@ export default function Sidebar() {
 
         <nav className="space-y-1">
           {navItems.map((item) => {
-            const isActive = pathname.startsWith(item.href);
+            const isActive = item.href === "/" 
+              ? pathname === "/" 
+              : pathname.startsWith(item.href);
             return (
               <Link key={item.name} href={item.href}>
                 <div className={`
