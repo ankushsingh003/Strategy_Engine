@@ -162,8 +162,8 @@ export default function Dashboard({ params }: { params: { industry: string } }) 
           <ShapExplainer 
             method={data.explainability.shap.method}
             summary={data.explainability.shap.summary}
-            factors={data.explainability.shap.top_features.map((f: any) => ({
-              feature: f.feature.replace(/_/g, ' '),
+            factors={(data.explainability.shap.top_features || []).map((f: any) => ({
+              feature: (f.feature || "").replace(/_/g, ' '),
               importance_pct: f.importance_pct,
               raw_shap: f.raw_shap
             }))}
