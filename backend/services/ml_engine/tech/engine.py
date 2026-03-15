@@ -33,7 +33,9 @@ class TechEngine(IndustryEngine):
         elif score > -0.01: label = "Saturation"
         else: label = "Decline"
         
+        base_res = await super().predict_status()
         return {
+            **base_res,
             "industry": "tech",
             "score": float(round(float(score), 3)),
             "label": label,

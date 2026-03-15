@@ -13,6 +13,9 @@ import { motion } from "framer-motion";
 export default function Dashboard({ params }: { params: { industry: string } }) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>(null);
+  const [selectedQuarter, setSelectedQuarter] = useState("Q4");
+
+  const quarters = ["Q1", "Q2", "Q3", "Q4"];
 
   useEffect(() => {
     const fetchAnalysis = async () => {
@@ -23,7 +26,8 @@ export default function Dashboard({ params }: { params: { industry: string } }) 
           body: JSON.stringify({
             company_name: "Strategy Engine",
             industry: params.industry,
-            region: "Global"
+            region: "Global",
+            quarter: selectedQuarter
           })
         });
         
@@ -37,7 +41,7 @@ export default function Dashboard({ params }: { params: { industry: string } }) 
     };
 
     fetchAnalysis();
-  }, [params.industry]);
+  }, [params.industry, selectedQuarter]);
 
   if (loading || !data) {
     return (
@@ -83,15 +87,23 @@ export default function Dashboard({ params }: { params: { industry: string } }) 
           </h1>
         </div>
         
-        <div className="flex gap-3">
-          <Link href="/" className="glass-card px-5 py-2.5 flex items-center gap-2 hover:bg-slate-800 transition-all font-medium text-sm">
-             Switch Industry
-          </Link>
-          <Link href={data.pdf_url} className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2.5 rounded-xl transition-all font-semibold text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/20">
-            <FileText className="w-4 h-4" /> Strategic Report
-          </Link>
-        </div>
       </header>
+
+      <div className="flex justify-between items-center bg-slate-900/50 p-1 rounded-xl border border-slate-800 w-fit">
+        {quarters.map((q) => (
+          <button
+            key={q}
+            onClick={() => setSelectedQuarter(q)}
+            className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${
+              selectedQuarter === q 
+                ? "bg-emerald-600 text-white shadow-lg" 
+                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+            }`}
+          >
+            {q} Analysis
+          </button>
+        ))}
+      </div>
 
       <div className="bento-grid !grid-rows-[repeat(4,minmax(200px,auto))]">
         

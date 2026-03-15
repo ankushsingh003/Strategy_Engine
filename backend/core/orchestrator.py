@@ -51,8 +51,8 @@ class Orchestrator:
         }
 
         # 2. Get Industry-Specific ML Engine and Run Prediction
-        logger.info(f"[Step 2] Running ML Engine for industry: {industry}...")
-        engine = await ml_factory.get_engine(industry)
+        logger.info(f"[Step 2] Running ML Engine for industry: {industry} ({company_input.get('quarter', 'Q4')})...")
+        engine = await ml_factory.get_engine(industry, quarter=company_input.get("quarter", "Q4"))
         ml_prediction = await engine.predict_status()
 
         # Log ML metrics to MLflow

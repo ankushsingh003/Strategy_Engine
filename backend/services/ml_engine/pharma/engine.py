@@ -36,7 +36,9 @@ class PharmaEngine(IndustryEngine):
         elif score > -0.05: label = "Saturation"
         else: label = "Decline"
         
+        base_res = await super().predict_status()
         return {
+            **base_res,
             "industry": "pharma",
             "score": float(round(float(score), 3)),
             "label": label,

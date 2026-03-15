@@ -24,7 +24,7 @@ class MLFactory:
         }
         self.initialized_industries = set()
 
-    async def get_engine(self, industry: str, force_refresh: bool = False):
+    async def get_engine(self, industry: str, force_refresh: bool = False, quarter: str = "Q4"):
         industry = industry.lower()
         engine = self.engines.get(industry)
         
@@ -33,9 +33,11 @@ class MLFactory:
             engine = GenericEngine(industry)
             self.engines[industry] = engine
             
-        if industry not in self.initialized_industries or force_refresh:
-            logger.info(f"[MLFactory] Triggering dynamic LLM-training for {industry}")
-            data = await knowledge_extractor.extract_industry_data(industry)
+        # For simulation, we always re-extract if the quarter changes or first time
+        if industry not in self.initialized_industries or force_refresh or engine.data_snapshot.get("quarter") != quarter:
+            logger.info(f"[MLFactory] Triggering dynamic LLM-training for {industry} ({quarter})")
+            data = await knowledge_extractor.extract_industry_data(industry, quarter=quarter)
+            data["quarter"] = quarter # Store quarter in snapshot
             await engine.train_with_data(data)
             self.initialized_industries.add(industry)
             

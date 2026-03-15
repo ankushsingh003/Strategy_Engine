@@ -13,6 +13,7 @@ class CompanyInput(BaseModel):
     revenue: Optional[float] = 0.0
     debt_equity_ratio: Optional[float] = 0.0
     gross_margin: Optional[float] = 0.0
+    quarter: Optional[str] = "Q4"
     historical_financials: Optional[List[Dict[str, Any]]] = []
 
 @router.post("/analyze")
