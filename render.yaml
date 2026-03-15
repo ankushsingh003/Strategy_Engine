@@ -4,7 +4,7 @@ services:
     name: market-intel-backend
     env: docker
     dockerContext: ./backend
-    dockerfilePath: ./backend/Dockerfile
+    dockerfilePath: Dockerfile
     plan: free # Change to pro for production scaling
     region: oregon
     healthCheckPath: /
