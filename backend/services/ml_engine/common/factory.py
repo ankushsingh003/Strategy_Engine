@@ -5,6 +5,7 @@ from backend.services.ml_engine.printing.engine import PrintingEngine
 from backend.services.ml_engine.pharma.engine import PharmaEngine
 from backend.services.ml_engine.tech.engine import TechEngine
 from backend.services.ml_engine.cosmetics.engine import CosmeticsEngine
+from backend.services.ml_engine.common.generic_engine import GenericEngine
 
 logger = logging.getLogger(__name__)
 
@@ -28,8 +29,9 @@ class MLFactory:
         engine = self.engines.get(industry)
         
         if not engine:
-            logger.warning(f"[MLFactory] No specialized engine for {industry}, falling back to Generic Tech logic")
-            engine = self.engines["tech"]
+            logger.warning(f"[MLFactory] No specialized engine for {industry}, using GenericEngine")
+            engine = GenericEngine(industry)
+            self.engines[industry] = engine
             
         if industry not in self.initialized_industries or force_refresh:
             logger.info(f"[MLFactory] Triggering dynamic LLM-training for {industry}")

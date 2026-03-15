@@ -12,6 +12,7 @@ from backend.services.market_engine.sentiment import sentiment_analyzer
 from backend.services.llm_engine.report_generator import report_generator
 from backend.services.llm_engine.gemini_client import gemini_client
 from backend.services.observability.mlflow_tracker import mlflow_tracker, langfuse_tracer
+from backend.services.market_engine.rag_agent import rag_agent
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +40,7 @@ class Orchestrator:
             macro_fetcher.collect_macro_factors(company_input.get("region", "Global")),
             micro_fetcher.collect_micro_factors(industry),
             sentiment_analyzer.analyze_sentiment(company_name, industry),
-            rag_agent.run_industry_research(industry, company_name)
+            gemini_client.generate(f"Industry Research: {industry} {company_name}")
         )
 
         market_data = {

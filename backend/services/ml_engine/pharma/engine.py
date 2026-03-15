@@ -15,7 +15,7 @@ class PharmaEngine(IndustryEngine):
         super().__init__("pharma")
         self.trained_params = {}
 
-    async def train_with_data(self, data: Dict[str, Any]):
+    async def train_with_data(self, data: Dict[str, Any]) -> None:
         logger.info("[PharmaEngine] Adapting model to pharmaceutical market data")
         
         players = data.get("players", [])
@@ -38,7 +38,7 @@ class PharmaEngine(IndustryEngine):
         
         return {
             "industry": "pharma",
-            "score": round(float(score), 3),
+            "score": float(round(float(score), 3)),
             "label": label,
             "focus": "R&D Pipeline Strength"
         }

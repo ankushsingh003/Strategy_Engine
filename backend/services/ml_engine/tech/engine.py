@@ -15,7 +15,7 @@ class TechEngine(IndustryEngine):
         super().__init__("tech")
         self.trained_params = {}
 
-    async def train_with_data(self, data: Dict[str, Any]):
+    async def train_with_data(self, data: Dict[str, Any]) -> None:
         logger.info("[TechEngine] Adapting model to technology sector financials")
         
         players = data.get("players", [])
@@ -35,7 +35,7 @@ class TechEngine(IndustryEngine):
         
         return {
             "industry": "tech",
-            "score": round(float(score), 3),
+            "score": float(round(float(score), 3)),
             "label": label,
             "focus": "AI Modernization"
         }

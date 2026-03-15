@@ -15,7 +15,7 @@ class CosmeticsEngine(IndustryEngine):
         super().__init__("cosmetics")
         self.trained_params = {}
 
-    async def train_with_data(self, data: Dict[str, Any]):
+    async def train_with_data(self, data: Dict[str, Any]) -> None:
         logger.info("[CosmeticsEngine] Adapting model to cosmetics market data")
         
         market = data.get("market_conditions", {})
@@ -35,7 +35,7 @@ class CosmeticsEngine(IndustryEngine):
         
         return {
             "industry": "cosmetics",
-            "score": round(float(score), 3),
+            "score": float(round(float(score), 3)),
             "label": label,
             "focus": "Consumer Brand Loyalty"
         }

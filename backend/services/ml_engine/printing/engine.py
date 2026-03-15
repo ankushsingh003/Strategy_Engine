@@ -15,7 +15,7 @@ class PrintingEngine(IndustryEngine):
         super().__init__("printing")
         self.trained_params = {}
 
-    async def train_with_data(self, data: Dict[str, Any]):
+    async def train_with_data(self, data: Dict[str, Any]) -> None:
         logger.info("[PrintingEngine] Adapting model to extracted printing market data")
         
         # Extract features from synthesis
@@ -47,7 +47,7 @@ class PrintingEngine(IndustryEngine):
         
         return {
             "industry": "printing",
-            "score": round(float(score), 3),
+            "score": float(round(float(score), 3)),
             "label": label,
             "metrics": {
                 "demand": params["market_demand"],
