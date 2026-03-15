@@ -6,46 +6,74 @@ import {
   Download, 
   ExternalLink, 
   Clock, 
-  ChevronRight,
+  ArrowRight,
   Search,
-  Filter,
-  ArrowDownToLine,
+  Zap,
   BarChart3,
-  ShieldAlert
+  ShieldCheck,
+  TrendingUp,
+  Globe,
+  Briefcase,
+  Layers,
+  Sparkles
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-interface Report {
+interface Industry {
   id: string;
-  company_name: string;
-  industry: string;
-  generated_at: string;
-  status: "ready" | "processing";
-  risk_level: "low" | "medium" | "high";
+  name: string;
+  count: string;
+  tagline: string;
+  impact: "High" | "Medium" | "Stable";
+  icon: any;
 }
 
-const mockReports: Report[] = [
-  { id: "REP-001", company_name: "Heidelberg Materials", industry: "Printing", generated_at: "2024-03-15", status: "ready", risk_level: "medium" },
-  { id: "REP-002", company_name: "Pfizer Inc", industry: "Pharma", generated_at: "2024-03-14", status: "ready", risk_level: "low" },
-  { id: "REP-003", company_name: "Nvidia", industry: "Tech", generated_at: "2024-03-12", status: "ready", risk_level: "high" },
-  { id: "REP-004", company_name: "L'Oreal", industry: "Cosmetics", generated_at: "2024-03-10", status: "ready", risk_level: "medium" },
+const INDUSTRIES: Industry[] = [
+  { id: "oil", name: "Oil & Gas", count: "115 Assets", tagline: "Energy transition and supply chain modeling.", impact: "High", icon: Globe },
+  { id: "tech", name: "Technology", count: "482 Assets", tagline: "SaaS growth, AI adoption, and hardware cycles.", impact: "High", icon: Zap },
+  { id: "pharma", name: "Pharmaceuticals", count: "210 Assets", tagline: "R&D efficiency and regulatory sentinel.", impact: "High", icon: ShieldCheck },
+  { id: "cosmetics", name: "Cosmetics", count: "95 Assets", tagline: "Brand equity and consumer sentiment analysis.", impact: "Medium", icon: Sparkles },
+  { id: "finance", name: "Finance", count: "340 Assets", tagline: "Global banking and fintech trajectory.", impact: "High", icon: Briefcase },
+  { id: "retail", name: "Retail", count: "128 Assets", tagline: "E-commerce and logistics intelligence.", impact: "Medium", icon: TrendingUp },
+  { id: "real_estate", name: "Real Estate", count: "156 Assets", tagline: "Commercial and residential yield trends.", impact: "Stable", icon: Layers },
+  { id: "energy", name: "Renewable Energy", count: "84 Assets", tagline: "Grid parity and clean-tech investment.", impact: "High", icon: Zap },
+  { id: "aviation", name: "Aviation", count: "112 Assets", tagline: "Fleet optimization and fuel hedging.", impact: "Medium", icon: BarChart3 },
+  { id: "logistics", name: "Logistics", count: "204 Assets", tagline: "Global supply chain resilience mapping.", impact: "High", icon: Briefcase },
+  { id: "agriculture", name: "Agriculture", count: "76 Assets", tagline: "Commodity pricing and agri-tech innovation.", impact: "Stable", icon: Globe },
+  { id: "media", name: "Media & Ent.", count: "135 Assets", tagline: "Streaming wars and digital content growth.", impact: "Medium", icon: Sparkles },
+  { id: "healthcare", name: "Healthcare", count: "218 Assets", tagline: "MedTech adoption and patient outcomes.", impact: "High", icon: ShieldCheck },
+  { id: "insurance", name: "Insurance", count: "142 Assets", tagline: "Risk actuary and insure-tech disruption.", impact: "Stable", icon: Layers },
+  { id: "coal", name: "Coal Mining", count: "64 Assets", tagline: "Resource management and ESG pressure.", impact: "Medium", icon: BarChart3 },
+  { id: "printing", name: "Industrial Printing", count: "42 Assets", tagline: "Digitization and packaging innovation.", impact: "Stable", icon: Layers },
 ];
 
 export default function ReportsPage() {
-  const [reports, setReports] = useState<Report[]>(mockReports);
   const [searchQuery, setSearchQuery] = useState("");
+  const [loadingId, setLoadingId] = useState<string | null>(null);
 
   const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
 
-  const handleDownload = (report: Report) => {
+  const handleDownload = async (industry: Industry) => {
+    setLoadingId(industry.id);
     const params = new URLSearchParams({
-      company: report.company_name,
-      industry: report.industry.toLowerCase(),
+      company: "Industry Overview",
+      industry: industry.id,
       region: "Global",
       quarter: "Q4"
     });
-    window.open(`${BACKEND_URL}/api/report/download/${report.id}?${params.toString()}`, "_blank");
+    
+    // We use a link instead of fetch because the backend returns a file stream
+    const downloadUrl = `${BACKEND_URL}/api/report/download/IND-${industry.id}?${params.toString()}`;
+    window.open(downloadUrl, "_blank");
+    
+    // Simulate loading state for a bit since we don't know when the download finishes
+    setTimeout(() => setLoadingId(null), 3000);
   };
+
+  const filteredIndustries = INDUSTRIES.filter(ind => 
+    ind.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    ind.id.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-slate-950 text-white pt-[--navbar-height] px-8 pb-12">
@@ -55,13 +83,13 @@ export default function ReportsPage() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <div className="h-10 w-10 bg-emerald-500/10 rounded-xl flex items-center justify-center border border-emerald-500/20">
-                <FileText className="text-emerald-400 w-5 h-5" />
+                <Briefcase className="text-emerald-400 w-5 h-5" />
               </div>
-              <h1 className="text-3xl font-bold tracking-tight">Intelligence Assets</h1>
+              <h1 className="text-3xl font-bold tracking-tight">Consultancy Hub</h1>
             </div>
             <p className="text-slate-400 text-sm max-w-xl">
-              Access generated strategic reports, financial deep-dives, and consultancy verdicts 
-              synthesized by the Vantage AI engine.
+              Download Board-Ready Strategic Masterplans for your target industry. 
+              Each report is synthesized using real-time ML-attributions and RAG-driven research.
             </p>
           </div>
 
@@ -70,7 +98,7 @@ export default function ReportsPage() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 group-focus-within:text-emerald-400 transition-colors" />
               <input 
                 type="text"
-                placeholder="Search reports..."
+                placeholder="Search sectors..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="bg-slate-900/50 border border-slate-800/80 rounded-full py-2.5 pl-11 pr-6 text-sm focus:outline-none focus:border-emerald-500/50 transition-all w-64"
@@ -79,79 +107,57 @@ export default function ReportsPage() {
           </div>
         </header>
 
-        {/* Stats Summary */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-slate-900/40 p-6 rounded-3xl border border-slate-800/50 backdrop-blur-xl">
-            <div className="flex items-center gap-3 mb-2 text-slate-500">
-               <ArrowDownToLine className="w-4 h-4" />
-               <span className="text-[10px] uppercase font-bold tracking-widest">Total Downloads</span>
-            </div>
-            <div className="text-2xl font-bold">1,284</div>
-          </div>
-          <div className="bg-slate-900/40 p-6 rounded-3xl border border-slate-800/50 backdrop-blur-xl">
-             <div className="flex items-center gap-3 mb-2 text-slate-500">
-               <ShieldAlert className="w-4 h-4 text-amber-500" />
-               <span className="text-[10px] uppercase font-bold tracking-widest">High Risk Alerts</span>
-            </div>
-            <div className="text-2xl font-bold">12 Active</div>
-          </div>
-           <div className="bg-slate-900/40 p-6 rounded-3xl border border-slate-800/50 backdrop-blur-xl">
-             <div className="flex items-center gap-3 mb-2 text-slate-500">
-               <BarChart3 className="w-4 h-4 text-emerald-500" />
-               <span className="text-[10px] uppercase font-bold tracking-widest">Sector Coverage</span>
-            </div>
-            <div className="text-2xl font-bold">4 Industries</div>
-          </div>
-        </div>
-
-        {/* Reports Grid */}
-        <div className="grid grid-cols-1 gap-4">
-          {reports
-            .filter(r => r.company_name.toLowerCase().includes(searchQuery.toLowerCase()))
-            .map((report) => (
+        {/* Industry Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filteredIndustries.map((ind) => (
             <motion.div 
-              key={report.id}
+              key={ind.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="group bg-slate-900/30 hover:bg-slate-900/60 border border-slate-800/50 hover:border-emerald-500/30 p-5 rounded-2xl transition-all flex items-center justify-between"
+              whileHover={{ y: -5 }}
+              className="group bg-slate-900/40 border border-slate-800/50 hover:border-emerald-500/30 rounded-3xl p-6 transition-all backdrop-blur-xl relative overflow-hidden"
             >
-              <div className="flex items-center gap-6">
-                <div className="h-14 w-14 bg-slate-950 rounded-xl flex items-center justify-center border border-slate-800 group-hover:border-emerald-500/20 transition-colors">
-                  <FileText className="text-slate-500 group-hover:text-emerald-400 w-6 h-6" />
+              {/* Background Glow */}
+              <div className="absolute -right-12 -top-12 w-32 h-32 bg-emerald-500/5 rounded-full blur-[60px] group-hover:bg-emerald-500/10 transition-colors" />
+              
+              <div className="flex items-start justify-between mb-8">
+                <div className={`p-3 rounded-2xl border transition-colors ${
+                  ind.id === 'oil' ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' :
+                  ind.id === 'tech' ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' :
+                  ind.id === 'pharma' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
+                  'bg-slate-800/50 border-slate-700 text-slate-400'
+                }`}>
+                  <ind.icon className="w-6 h-6" />
                 </div>
-                
-                <div>
-                  <div className="flex items-center gap-3 mb-1">
-                    <h3 className="font-bold text-slate-200 group-hover:text-white transition-colors">
-                      {report.company_name} - Strategic Analysis
-                    </h3>
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tighter
-                      ${report.risk_level === 'high' ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 
-                        report.risk_level === 'medium' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 
-                        'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}
-                    `}>
-                      {report.risk_level} Risk
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-4 text-xs text-slate-500">
-                    <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> {report.generated_at}</span>
-                    <span className="flex items-center gap-1.5 uppercase tracking-widest font-bold text-[9px] text-slate-600">{report.industry} Sector</span>
-                    <span className="text-slate-700">|</span>
-                    <span className="text-slate-600 font-mono">{report.id}</span>
-                  </div>
-                </div>
+                <span className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${
+                  ind.impact === 'High' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
+                  ind.impact === 'Medium' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                  'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                }`}>
+                  {ind.impact} Volatility
+                </span>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="mb-8">
+                <h3 className="text-xl font-bold text-white mb-2">{ind.name}</h3>
+                <p className="text-slate-400 text-xs leading-relaxed min-h-[32px]">
+                  {ind.tagline}
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between mt-auto pt-6 border-t border-slate-800/50">
+                <div className="flex items-center gap-2 text-slate-500">
+                  <FileText className="w-3.5 h-3.5" />
+                  <span className="text-[10px] uppercase font-bold tracking-wider">{ind.count}</span>
+                </div>
+                
                 <button
-                  onClick={() => handleDownload(report)}
-                  className="flex items-center gap-2 px-4 py-2 bg-slate-950 hover:bg-emerald-500 text-slate-300 hover:text-white border border-slate-800 hover:border-emerald-600 rounded-xl transition-all font-medium text-sm group/btn"
+                  onClick={() => handleDownload(ind)}
+                  disabled={loadingId === ind.id}
+                  className="flex items-center gap-2 text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors group/btn disabled:opacity-50"
                 >
-                  <Download className="w-4 h-4 group-hover/btn:animate-bounce" />
-                  Download PDF
-                </button>
-                <button className="p-2 border border-slate-800 rounded-xl hover:bg-slate-800 transition-colors text-slate-500 hover:text-white">
-                  <ExternalLink className="w-4 h-4" />
+                  {loadingId === ind.id ? "Synthesizing..." : "Get Verdict"}
+                  <Download className={`w-3.5 h-3.5 group-hover/btn:translate-y-0.5 transition-transform`} />
                 </button>
               </div>
             </motion.div>
@@ -159,12 +165,20 @@ export default function ReportsPage() {
         </div>
 
         {/* Empty State */}
-        {reports.length === 0 && (
+        {filteredIndustries.length === 0 && (
           <div className="py-20 flex flex-col items-center justify-center text-slate-600">
-            <Filter className="w-12 h-12 mb-4 opacity-20" />
-            <p className="text-lg">No reports matching your search criteria.</p>
+            <Search className="w-12 h-12 mb-4 opacity-20" />
+            <p className="text-lg">No industry sectors matching your search.</p>
           </div>
         )}
+
+        {/* Disclaimer */}
+        <div className="mt-16 p-6 rounded-2xl bg-slate-900/20 border border-slate-800/50 text-center">
+          <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mb-2">Technical Disclaimer</p>
+          <p className="text-xs text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            All reports are dynamically generated by Gemini 1.5 Flash using live RAG context. Financial predictions are based on ensemble ML models (XGBoost/LSTM) and should be used as secondary decision support tools in professional consultancy workflows.
+          </p>
+        </div>
       </div>
     </div>
   );

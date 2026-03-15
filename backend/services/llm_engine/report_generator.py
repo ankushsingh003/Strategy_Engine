@@ -22,4 +22,18 @@ class ReportGenerator:
         
         return report_markdown
 
+    async def generate_industry_consultancy_report(self, market_data: dict, industry: str) -> str:
+        logger.info(f"Generating industry-wide consultancy report for {industry}")
+        
+        # 1. Build prompt
+        prompt = prompt_builder.build_industry_consultancy_prompt(
+            market_data=market_data,
+            industry=industry
+        )
+        
+        # 2. Query LLM
+        report_markdown = await gemini_client.generate(prompt)
+        
+        return report_markdown
+
 report_generator = ReportGenerator()

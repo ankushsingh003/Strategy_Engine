@@ -3,6 +3,52 @@ class PromptBuilder:
     Constructs the dynamic system prompt based on results from all other engines.
     """
     
+    def build_industry_consultancy_prompt(self, market_data: dict, industry: str) -> str:
+        return f"""
+You are a Senior Strategic Advisor at a McKinsey/BCG/Bain-level consultancy. 
+Your task is to produce a "Board-Ready" Industrial Strategic Masterplan for the {industry.upper()} sector.
+
+1. SECTOR INTELLIGENCE CONTEXT
+
+--- MACRO-ECONOMIC RISK VECTORS ---
+GDP Context: {market_data.get('macro', {}).get('gdp_growth', 'N/A')}%
+Inflation/Fiscal Pressure: {market_data.get('macro', {}).get('inflation_rate', 'N/A')}%
+Monetary Policy: {market_data.get('macro', {}).get('monetary_policy', 'N/A')}
+Regional Sentinel Summary: {market_data.get('macro', {}).get('summary', 'N/A')}
+
+--- MARKET RESEARCH (RAG) CONTEXT ---
+{market_data.get('rag_context', 'No additional sector research available.')}
+
+--- MICRO-MARKET & COMPETITIVE DYNAMICS ---
+Sector CAGR: {market_data.get('micro', {}).get('industry_cagr', 'N/A')}%
+Competitive Saturation: {market_data.get('micro', {}).get('competitor_count_delta', 'N/A')}
+Market Share Dynamic: {market_data.get('micro', {}).get('market_share_dynamic', 'N/A')}
+Entry Barriers: {market_data.get('micro', {}).get('entry_barriers', 'N/A')}
+Key Value Drivers: {', '.join(market_data.get('micro', {}).get('key_value_drivers', []))}
+Sector Headwinds: {', '.join(market_data.get('micro', {}).get('sector_headwinds', []))}
+
+2. BOARD-READY DELIVERABLE SPECIFICATION
+
+Produce a professional Markdown report follow this exact sequence:
+
+# I. {industry.upper()} SECTOR: EXECUTIVE STRATEGIC VERDICT
+(Summarize the current condition of the industry. High-level 'So What?' analysis.)
+
+# II. MACRO-ECONOMIC TAILWINDS & HEADWINDS
+(How global economic shifts are directly impacting sectoral profitability.)
+
+# III. THE COMPETITIVE LANDSCAPE & BARRIERS TO ENTRY
+(Analysis of saturation, entry barriers, and market share shifts.)
+
+# IV. FUTURE GROWTH TRAJECTORIES & INNOVATION DRIVERS
+(Where is the industry heading in the next 24-36 months? Focus on {industry} specific tech/shifts.)
+
+# V. CORE STRATEGIC RECOMMENDATIONS FOR SECTOR LEADERS
+(3-5 high-impact recommendations to navigate the current environment.)
+
+Output EXCLUSIVELY the Markdown content.
+"""
+
     def build_consultancy_prompt(self, ml_output: dict, market_data: dict, company_input: dict) -> str:
         industry = company_input.get("industry", "Unknown Sector")
         company_name = company_input.get("company_name", "the company")

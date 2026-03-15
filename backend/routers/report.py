@@ -17,6 +17,11 @@ async def download_report(
 ):
     """Generates and returns the elite PDF report for download using real-time analysis."""
     
+    # If the report_id is an industry placeholder (e.g., IND-oil), treat as industry review
+    if report_id.startswith("IND-"):
+        company = "Industry Overview"
+        industry = report_id.replace("IND-", "")
+    
     logger.info(f"Generating full strategic intelligence report for {company} (Industry: {industry})")
     
     try:

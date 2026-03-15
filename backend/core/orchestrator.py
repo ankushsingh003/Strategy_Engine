@@ -76,13 +76,20 @@ class Orchestrator:
         )
 
         # 4. Generate LLM Report
-        logger.info("[Step 4] Generating Consultancy Report via Claude...")
+        logger.info(f"[Step 4] Generating Consultancy Report via AI (Industry: {industry})...")
         llm_start = time.time()
-        report_markdown = await report_generator.generate_consultancy_report(
-            ml_output=ml_prediction,
-            market_data=market_data,
-            company_input=company_input
-        )
+        
+        if company_name == "Industry Overview":
+            report_markdown = await report_generator.generate_industry_consultancy_report(
+                market_data=market_data,
+                industry=industry
+            )
+        else:
+            report_markdown = await report_generator.generate_consultancy_report(
+                ml_output=ml_prediction,
+                market_data=market_data,
+                company_input=company_input
+            )
         llm_latency_ms = (time.time() - llm_start) * 1000
 
         # Trace LLM call in Langfuse
