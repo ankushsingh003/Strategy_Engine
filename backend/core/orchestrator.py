@@ -34,14 +34,18 @@ class Orchestrator:
         mlflow_tracker.start_run(run_name=f"{company_name}_{industry}")
         mlflow_tracker.log_params({"company": company_name, "industry": industry})
 
-        # 1. Gather Market Data + RAG in parallel
-        logger.info("[Step 1] Fetching Market Signals + RAG Context...")
-        macro_res, micro_res, sentiment_res, rag_context = await asyncio.gather(
-            macro_fetcher.collect_macro_factors(company_input.get("region", "Global")),
-            micro_fetcher.collect_micro_factors(industry),
-            sentiment_analyzer.analyze_sentiment(company_name, industry),
-            gemini_client.generate(f"Industry Research: {industry} {company_name}")
-        )
+        # 1. Gather Market Data (Sequential to strictly avoid 429)
+        logger.info("[Step 1] Fetching Macro Signals...")
+        macro_res = await macro_fetcher.collect_macro_factors(company_input.get("region", "Global"))
+        
+        logger.info("[Step 1.1] Fetching Micro Signals...")
+        micro_res = await micro_fetcher.collect_micro_factors(industry)
+        
+        logger.info("[Step 1.2] Fetching Sentiment...")
+        sentiment_res = await sentiment_analyzer.analyze_sentiment(company_name, industry)
+        
+        logger.info("[Step 1.3] Fetching RAG Context...")
+        rag_context = await gemini_client.generate(f"Industry Research: {industry} {company_name}")
 
         market_data = {
             "macro": macro_res,

@@ -22,24 +22,36 @@ class GeminiClient:
             self.model = genai.GenerativeModel('gemini-1.5-flash')
             self.mock_mode = False
             
-    async def generate(self, prompt: str, max_tokens: int = 4000) -> str:
-        """Sends a prompt to Gemini and returns the generated text."""
+    async def generate(self, prompt: str, max_tokens: int = 4000, retries: int = 5) -> str:
+        """Sends a prompt to Gemini with exponential backoff for rate limits."""
         if self.mock_mode:
             return self._mock_response()
             
-        logger.info("Sending request to Gemini API...")
-        try:
-            # Note: Gemini's async implementation is through generate_content_async
-            response = await self.model.generate_content_async(
-                prompt,
-                generation_config=genai.types.GenerationConfig(
-                    max_output_tokens=max_tokens,
+        import time
+        import asyncio
+        
+        for attempt in range(retries):
+            try:
+                logger.info(f"Sending request to Gemini API (Attempt {attempt + 1})...")
+                response = await self.model.generate_content_async(
+                    prompt,
+                    generation_config=genai.types.GenerationConfig(
+                        max_output_tokens=max_tokens,
+                    )
                 )
-            )
-            return response.text
-        except Exception as e:
-            logger.error(f"Error calling Gemini API: {e}")
-            return f"Error connecting to LLM Service: {str(e)}"
+                return response.text
+            except Exception as e:
+                if "429" in str(e) and attempt < retries - 1:
+                    import random
+                    wait_time = (2 ** attempt) + random.uniform(1, 4)
+                    logger.warning(f"Gemini Rate Limit hit. Retrying in {wait_time:.1f}s...")
+                    await asyncio.sleep(wait_time)
+                    continue
+                
+                logger.error(f"Error calling Gemini API: {e}")
+                return f"Error connecting to LLM Service: {str(e)}"
+        
+        return "Error: Maximum retries exceeded for LLM Service."
             
     def _mock_response(self) -> str:
         return """
