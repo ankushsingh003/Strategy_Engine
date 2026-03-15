@@ -10,7 +10,7 @@ from backend.services.market_engine.macro_fetcher import macro_fetcher
 from backend.services.market_engine.micro_fetcher import micro_fetcher
 from backend.services.market_engine.sentiment import sentiment_analyzer
 from backend.services.llm_engine.report_generator import report_generator
-from backend.services.llm_engine.rag_agent import rag_agent
+from backend.services.llm_engine.claude_client import claude_client
 from backend.services.observability.mlflow_tracker import mlflow_tracker, langfuse_tracer
 
 logger = logging.getLogger(__name__)
@@ -85,7 +85,19 @@ class Orchestrator:
             latency_ms=llm_latency_ms
         )
 
-        # 5. PDF URL (hook)
+        # 5. Generate Dynamic Strategic Verdict for Dashboard
+        logger.info("[Step 5] Generating Strategic Verdict via AI...")
+        verdict_prompt = f"""
+        Context: Strategy Engine predicted '{ml_result.get('label')}' with {ml_result.get('confidence')*100}% confidence for {company_name} in {industry}.
+        Industry CAGR: {market_data['micro'].get('industry_cagr')}%
+        Sentiment: {market_data['sentiment'].get('social_sentiment_score')}
+        
+        Task: Provide a 2-sentence hard-hitting strategic verdict.
+        Output ONLY the text.
+        """
+        strategic_verdict = await claude_client.generate(verdict_prompt, max_tokens=100)
+
+        # 6. PDF URL (hook)
         pdf_url = f"/reports/generated/{company_name.lower().replace(' ', '_')}_{int(datetime.now().timestamp())}.pdf"
 
         # End MLflow run
@@ -97,7 +109,7 @@ class Orchestrator:
             "status": "success",
             "company_name": company_name,
             "industry": industry,
-            "ml_verdict": ml_result,
+            "ml_verdict": {**ml_result, "strategic_insight": strategic_verdict},
             "explainability": {
                 "shap": shap_result,
                 "lime": lime_result
