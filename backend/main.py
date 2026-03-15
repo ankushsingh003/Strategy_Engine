@@ -1,5 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import dotenv
+import os
+
+# Load environment variables from .env
+dotenv.load_dotenv()
+
 from backend.routers import analyze, predict, report, chat, ws_signals, market
 
 app = FastAPI(

@@ -1,7 +1,9 @@
 import asyncio
 import logging
 import random
+import json
 from typing import Dict, List, Any
+from backend.services.llm_engine.claude_client import claude_client
 
 logger = logging.getLogger(__name__)
 
@@ -13,9 +15,37 @@ class SHAPExplainer:
     """
 
     async def explain(self, features: dict, ml_result: dict) -> Dict[str, Any]:
-        logger.info("[SHAP] Generating feature attribution for tabular models...")
-        await asyncio.sleep(0.4)
+        industry = ml_result.get("industry", "general")
+        label = ml_result.get("label", "Unknown")
+        
+        if claude_client.mock_mode:
+            return await self._get_mock_shap(features, ml_result)
 
+        logger.info(f"[SHAP] Generating AI attribution for {industry} ({label})...")
+        
+        prompt = f"""
+        Role: ML Explainability Expert (SHAP).
+        Context: The V2 Strategy Engine predicted a status of '{label}' for a company in the '{industry}' industry.
+        Task: Deduce which 5 features (from standard financial/market metrics) were likely the top predictors for this result.
+        
+        Return JSON with:
+        - "method": "SHAP (Contextual Inference)"
+        - "base_value": float (prediction probability baseline)
+        - "top_features": array of {{ "feature": string, "importance_pct": float(1-40), "raw_shap": float }}
+        - "summary": One sentence strategy insight.
+        
+        Output ONLY valid JSON.
+        """
+        
+        try:
+            res = await claude_client.generate(prompt)
+            clean_json = res.strip().replace("```json", "").replace("```", "")
+            return json.loads(clean_json)
+        except Exception as e:
+            logger.error(f"[SHAP] LLM failed: {e}")
+            return await self._get_mock_shap(features, ml_result)
+
+    async def _get_mock_shap(self, features: dict, ml_result: dict) -> Dict[str, Any]:
         # Simulate SHAP feature importance values using industry as seed for variation
         feature_keys = list(features.keys()) if features else [
             "revenue_growth_yoy", "debt_equity_ratio", "operating_margin",
@@ -38,7 +68,7 @@ class SHAPExplainer:
         top_factors = sorted(shap_pct.items(), key=lambda x: x[1], reverse=True)[:5]
 
         return {
-            "method": "SHAP (TreeExplainer)",
+            "method": "SHAP (TreeExplainer Fallback)",
             "base_value": round(random.uniform(0.3, 0.5), 3),
             "model_label": ml_result.get("label", "Unknown"),
             "top_features": [{"feature": k, "importance_pct": v, "raw_shap": shap_values[k]} for k, v in top_factors],
@@ -53,8 +83,39 @@ class LIMEExplainer:
     """
 
     async def explain(self, time_series: list, ml_result: dict) -> Dict[str, Any]:
+        industry = ml_result.get("industry", "general")
+        forecast = ml_result.get("forecast_summary", "N/A")
+        
+        if claude_client.mock_mode:
+            return await self._get_mock_lime(ml_result)
+
+        logger.info(f"[LIME] Generating AI time-series segments for {industry}...")
+        
+        prompt = f"""
+        Role: Time-Series Explainer (LIME).
+        Context: Dashboard shows a '{forecast}' trajectory for the '{industry}' market.
+        Task: Create 4 key 'segments' (events or trends in time) that explain this forecast.
+        
+        Return JSON with:
+        - "method": "LIME (Contextual Inference)"
+        - "forecast_label": string
+        - "key_segments": array of {{ "segment": string, "impact": "positive"|"negative", "weight": float(0-1) }}
+        - "summary": Strategy insight.
+        
+        Output ONLY valid JSON.
+        """
+        
+        try:
+            res = await claude_client.generate(prompt)
+            clean_json = res.strip().replace("```json", "").replace("```", "")
+            return json.loads(clean_json)
+        except Exception as e:
+            logger.error(f"[LIME] LLM failed: {e}")
+            return await self._get_mock_lime(ml_result)
+
+    async def _get_mock_lime(self, ml_result: dict) -> Dict[str, Any]:
         logger.info("[LIME] Generating local explanations for time-series models...")
-        await asyncio.sleep(0.35)
+        await asyncio.sleep(0.1)
 
         segments = [
             {"segment": "Q4 Revenue Spike", "impact": "positive", "weight": round(random.uniform(0.2, 0.5), 3)},

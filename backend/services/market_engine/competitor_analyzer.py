@@ -2,7 +2,9 @@ import asyncio
 import logging
 import random
 import hashlib
+import json
 from typing import List, Dict, Any
+from backend.services.llm_engine.claude_client import claude_client
 
 logger = logging.getLogger(__name__)
 
@@ -15,13 +17,59 @@ class CompetitorAnalyzer:
     def _get_seed(self, industry: str) -> int:
         return int(hashlib.md5(industry.lower().encode()).hexdigest(), 16) % 10**8
 
-    async def get_industry_competitors(self, industry: str) -> List[Dict[str, Any]]:
-        logger.info(f"[CompetitorAnalyzer] Fetching leaders for {industry}")
-        await asyncio.sleep(0.4)
+    async def get_industry_intelligence(self, industry: str) -> Dict[str, Any]:
+        """
+        Uses Claude to generate comprehensive market intelligence or falls back to deterministic data.
+        """
+        if claude_client.mock_mode:
+            logger.info("[CompetitorAnalyzer] Running in MOCK mode. Using deterministic logic.")
+            competitors = await self._get_mock_competitors(industry)
+            signals = await self._get_mock_signals(industry)
+            return {"competitors": competitors, **signals}
+
+        prompt = f"""
+        Analyze the {industry} industry and provide a detailed competitive intelligence report in JSON format.
         
-        random.seed(self._get_seed(industry))
+        Requirements:
+        1. Top 5 real-world competitors with:
+           - "name": Official company name.
+           - "market_share": Estimated % (numeric).
+           - "growth_yoy": Estimated annual growth % (numeric).
+           - "core_strength": 3-5 words describing their primary advantage.
+           - "status": One of ["Dominant", "Strong", "Challenger"].
+           
+        2. Success Factors (4 items):
+           - "name": Category name.
+           - "desc": Strategic explanation.
+           - "weight": 0.0 to 1.0 (numeric).
+           - "industry_impact": "High" or "Medium".
+           
+        3. Strategic Signals (3 items):
+           - "type": ["regulatory", "merger", "tech", "macro"].
+           - "msg": Brief headline.
+           
+        Format: ONLY return valid JSON without markdown blocks or preamble.
+        {{
+            "competitors": [...],
+            "success_factors": [...],
+            "live_signals": [...]
+        }}
+        """
         
-        # Industry-specific base competitors
+        try:
+            response_text = await claude_client.generate(prompt)
+            # Basic cleanup of markdown backticks if LLM includes them
+            clean_json = response_text.strip().replace("```json", "").replace("```", "")
+            return json.loads(clean_json)
+        except Exception as e:
+            logger.error(f"[CompetitorAnalyzer] LLM error: {e}. Falling back.")
+            competitors = await self._get_mock_competitors(industry)
+            signals = await self._get_mock_signals(industry)
+            return {"competitors": competitors, **signals}
+
+    async def _get_mock_competitors(self, industry: str) -> List[Dict[str, Any]]:
+        logger.info(f"[CompetitorAnalyzer] Fetching mock leaders for {industry}")
+        await asyncio.sleep(0.1)
         industry_leaders = {
             "printing": ["Heidelberg", "HP Indigo", "Konica Minolta", "Ricoh", "Canon"],
             "pharma": ["Pfizer", "Roche", "Novartis", "Merck", "AbbVie"],
@@ -47,9 +95,9 @@ class CompetitorAnalyzer:
             
         return sorted(competitors, key=lambda x: x["market_share"], reverse=True)
 
-    async def get_success_factors(self, industry: str) -> List[Dict[str, Any]]:
-        logger.info(f"[CompetitorAnalyzer] Mapping success factors for {industry}")
-        await asyncio.sleep(0.3)
+    async def _get_mock_signals(self, industry: str) -> Dict[str, Any]:
+        logger.info(f"[CompetitorAnalyzer] Mapping mock signals for {industry}")
+        await asyncio.sleep(0.1)
         
         random.seed(self._get_seed(industry) + 1)
         
@@ -69,6 +117,13 @@ class CompetitorAnalyzer:
             factor["weight"] = round(w, 2)
             factor["industry_impact"] = "High" if w > 0.8 else "Medium"
             
-        return selected
+        return {
+            "success_factors": selected,
+            "live_signals": [
+                {"type": "regulatory", "msg": f"New sustainability guidelines detected for {industry}."},
+                {"type": "merger", "msg": f"Consolidation talk in {industry} mid-market increases."},
+                {"type": "tech", "msg": f"AI-driven automation adoption hits 40% in {industry} leaders."}
+            ]
+        }
 
 competitor_analyzer = CompetitorAnalyzer()

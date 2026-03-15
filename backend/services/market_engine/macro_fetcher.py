@@ -1,5 +1,7 @@
 import asyncio
 import logging
+import json
+from backend.services.llm_engine.claude_client import claude_client
 
 logger = logging.getLogger(__name__)
 
@@ -9,27 +11,41 @@ class MacroFetcher:
     Sources: World Bank API, FRED, IMF Data
     """
     
-    async def fetch_gdp_growth(self, country: str = "US") -> float:
-        # Abstracting actual HTTP request to FRED/WorldBank
-        await asyncio.sleep(0.2) 
-        return 2.1  # Mock GDP Growth %
-        
-    async def fetch_inflation_rate(self, country: str = "US") -> float:
-        # Abstracting actual HTTP request
-        await asyncio.sleep(0.2)
-        return 3.4  # Mock Inflation %
-        
     async def collect_macro_factors(self, region: str = "Global") -> dict:
-        logger.info(f"Fetching macro factors for {region}")
-        gdp, inflation = await asyncio.gather(
-            self.fetch_gdp_growth(region),
-            self.fetch_inflation_rate(region)
-        )
+        if claude_client.mock_mode:
+            return await self._get_mock_macro(region)
+
+        logger.info(f"Generating AI macro factors for {region}")
+        prompt = f"""
+        Role: Macroeconomic Analyst.
+        Context: Strategy report for the '{region}' region.
+        Task: Provide estimated economic data for this region in JSON.
         
+        Return JSON with:
+        - "gdp_growth": float (e.g., 2.5)
+        - "inflation_rate": float (e.g., 3.8)
+        - "interest_rate": float (e.g., 5.0)
+        - "summary": One sentence economic outlook.
+        
+        Output ONLY valid JSON.
+        """
+        
+        try:
+            res = await claude_client.generate(prompt)
+            clean_json = res.strip().replace("```json", "").replace("```", "")
+            data = json.loads(clean_json)
+            data["region"] = region
+            return data
+        except Exception as e:
+            logger.error(f"[Macro] LLM failed: {e}")
+            return await self._get_mock_macro(region)
+
+    async def _get_mock_macro(self, region: str) -> dict:
+        await asyncio.sleep(0.1)
         return {
-            "gdp_growth": gdp,
-            "inflation_rate": inflation,
-            "interest_rate": 5.25, # Mock
+            "gdp_growth": 2.1,
+            "inflation_rate": 3.4,
+            "interest_rate": 5.25,
             "region": region,
             "summary": "Moderate growth environment with sticky inflation leading to sustained higher interest rates."
         }

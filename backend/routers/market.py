@@ -6,23 +6,19 @@ router = APIRouter()
 @router.get("/market/competitors/{industry}")
 async def get_competitors(industry: str):
     """
-    Returns market leaders, their share, and growth for the given industry.
+    Returns market leaders, their share, and tokens using AI intelligence.
     """
-    competitors = await competitor_analyzer.get_industry_competitors(industry)
-    return {"industry": industry, "competitors": competitors}
+    intelligence = await competitor_analyzer.get_industry_intelligence(industry)
+    return {"industry": industry, "competitors": intelligence.get("competitors", [])}
 
 @router.get("/market/signals/{industry}")
 async def get_market_signals(industry: str):
     """
-    Returns industry-specific success factors and strategic signals.
+    Returns industry-specific success factors and strategic signals using AI intelligence.
     """
-    factors = await competitor_analyzer.get_success_factors(industry)
+    intelligence = await competitor_analyzer.get_industry_intelligence(industry)
     return {
         "industry": industry,
-        "success_factors": factors,
-        "live_signals": [
-            {"type": "regulatory", "msg": f"New sustainability guidelines detected for {industry}."},
-            {"type": "merger", "msg": f"Consolidation talk in {industry} mid-market increases."},
-            {"type": "tech", "msg": f"AI-driven automation adoption hits 40% in {industry} leaders."}
-        ]
+        "success_factors": intelligence.get("success_factors", []),
+        "live_signals": intelligence.get("live_signals", [])
     }
