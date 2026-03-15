@@ -1,4 +1,4 @@
-from backend.services.llm_engine.claude_client import claude_client
+from backend.services.llm_engine.gemini_client import gemini_client
 from backend.services.llm_engine.prompt_builder import prompt_builder
 
 import logging
@@ -18,7 +18,7 @@ class ReportGenerator:
         )
         
         # 2. Query LLM
-        report_markdown = await claude_client.generate(prompt)
+        report_markdown = await gemini_client.generate(prompt)
         
         return report_markdown
 

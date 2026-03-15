@@ -4,7 +4,7 @@ import random
 import hashlib
 import json
 from typing import List, Dict, Any
-from backend.services.llm_engine.claude_client import claude_client
+from backend.services.llm_engine.gemini_client import gemini_client
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ class CompetitorAnalyzer:
         """
         Uses Claude to generate comprehensive market intelligence or falls back to deterministic data.
         """
-        if claude_client.mock_mode:
+        if gemini_client.mock_mode:
             logger.info("[CompetitorAnalyzer] Running in MOCK mode. Using deterministic logic.")
             competitors = await self._get_mock_competitors(industry)
             signals = await self._get_mock_signals(industry)
@@ -57,7 +57,7 @@ class CompetitorAnalyzer:
         """
         
         try:
-            response_text = await claude_client.generate(prompt)
+            response_text = await gemini_client.generate(prompt)
             # Basic cleanup of markdown backticks if LLM includes them
             clean_json = response_text.strip().replace("```json", "").replace("```", "")
             return json.loads(clean_json)

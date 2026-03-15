@@ -3,7 +3,7 @@ import logging
 import random
 import json
 from typing import Dict, List, Any
-from backend.services.llm_engine.claude_client import claude_client
+from backend.services.llm_engine.gemini_client import gemini_client
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ class SHAPExplainer:
         industry = ml_result.get("industry", "general")
         label = ml_result.get("label", "Unknown")
         
-        if claude_client.mock_mode:
+        if gemini_client.mock_mode:
             return await self._get_mock_shap(features, ml_result)
 
         logger.info(f"[SHAP] Generating AI attribution for {industry} ({label})...")
@@ -86,7 +86,7 @@ class LIMEExplainer:
         industry = ml_result.get("industry", "general")
         forecast = ml_result.get("forecast_summary", "N/A")
         
-        if claude_client.mock_mode:
+        if gemini_client.mock_mode:
             return await self._get_mock_lime(ml_result)
 
         logger.info(f"[LIME] Generating AI time-series segments for {industry}...")

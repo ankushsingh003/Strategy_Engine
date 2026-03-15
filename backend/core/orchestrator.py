@@ -10,7 +10,7 @@ from backend.services.market_engine.macro_fetcher import macro_fetcher
 from backend.services.market_engine.micro_fetcher import micro_fetcher
 from backend.services.market_engine.sentiment import sentiment_analyzer
 from backend.services.llm_engine.report_generator import report_generator
-from backend.services.llm_engine.claude_client import claude_client
+from backend.services.llm_engine.gemini_client import gemini_client
 from backend.services.observability.mlflow_tracker import mlflow_tracker, langfuse_tracer
 
 logger = logging.getLogger(__name__)
@@ -95,7 +95,7 @@ class Orchestrator:
         Task: Provide a 2-sentence hard-hitting strategic verdict.
         Output ONLY the text.
         """
-        strategic_verdict = await claude_client.generate(verdict_prompt, max_tokens=100)
+        strategic_verdict = await gemini_client.generate(verdict_prompt, max_tokens=100)
 
         # 6. PDF URL (hook)
         pdf_url = f"/reports/generated/{company_name.lower().replace(' ', '_')}_{int(datetime.now().timestamp())}.pdf"

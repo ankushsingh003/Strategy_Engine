@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import json
-from backend.services.llm_engine.claude_client import claude_client
+from backend.services.llm_engine.gemini_client import gemini_client
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +12,7 @@ class MicroFetcher:
     """
     
     async def collect_micro_factors(self, industry: str) -> dict:
-        if claude_client.mock_mode:
+        if gemini_client.mock_mode:
             return await self._get_mock_micro(industry)
 
         logger.info(f"Generating AI micro factors for {industry}")
@@ -31,7 +31,7 @@ class MicroFetcher:
         """
         
         try:
-            res = await claude_client.generate(prompt)
+            res = await gemini_client.generate(prompt)
             clean_json = res.strip().replace("```json", "").replace("```", "")
             data = json.loads(clean_json)
             data["industry"] = industry
