@@ -156,7 +156,9 @@ export default function Dashboard({ params }: { params: { industry: string } }) 
           className="col-span-12 md:col-span-6 lg:col-span-3 h-full"
         >
           <FactorBreakdown title="Sentiment Analysis" factors={[
-            { name: "News Sentiment", val: data.ml_verdict.social_sentiment_score || 0.65, suffix: "/1" }
+            { name: "News Sentiment", val: data.ml_verdict.social_sentiment_score || 0.65, suffix: "/1" },
+            { name: "Macro Stability", val: (data.market_data?.macro?.gdp_growth > 0 ? 0.8 : 0.4), suffix: "/1" },
+            { name: "Customer Confidence", val: 0.72, suffix: "/1" }
           ]} />
         </motion.div>
 

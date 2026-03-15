@@ -111,12 +111,27 @@ class Orchestrator:
         mlflow_tracker.log_metrics({"total_latency_s": time.time() - start_time})
         mlflow_tracker.end_run()
 
+        # 7. Map missing dashboard metrics for frontend compatibility
+        feature_contributions = [
+            {"name": f["feature"].replace("_", " ").title(), "val": f["importance_pct"], "suffix": "%"}
+            for f in shap_result.get("top_features", [])
+        ]
+        
+        # Final combined verdict for dashboard
+        dashboard_verdict = {
+            **ml_prediction,
+            "strategic_insight": strategic_verdict,
+            "social_sentiment_score": market_data["sentiment"].get("social_sentiment_score", 0.5),
+            "feature_contributions": feature_contributions
+        }
+
         logger.info("=== Analysis Complete ===")
         return {
             "status": "success",
             "company_name": company_name,
             "industry": industry,
-            "ml_verdict": {**ml_prediction, "strategic_insight": strategic_verdict},
+            "ml_verdict": dashboard_verdict,
+            "market_data": market_data, # Return raw market data for frontend flexibility
             "explainability": {
                 "shap": shap_result,
                 "lime": lime_result
