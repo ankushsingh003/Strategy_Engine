@@ -17,13 +17,15 @@ export default function Dashboard({ params }: { params: { industry: string } }) 
 
   const quarters = ["Q1", "Q2", "Q3", "Q4"];
 
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+
   useEffect(() => {
     const fetchAnalysis = async () => {
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 90000); // 90s timeout
 
-        const response = await fetch("http://localhost:8000/api/analyze", {
+        const response = await fetch(`${BACKEND_URL}/api/analyze`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

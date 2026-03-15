@@ -35,6 +35,8 @@ export default function ReportsPage() {
   const [reports, setReports] = useState<Report[]>(mockReports);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+
   const handleDownload = (report: Report) => {
     const params = new URLSearchParams({
       company: report.company_name,
@@ -42,7 +44,7 @@ export default function ReportsPage() {
       region: "Global",
       quarter: "Q4"
     });
-    window.open(`http://localhost:8000/api/report/download/${report.id}?${params.toString()}`, "_blank");
+    window.open(`${BACKEND_URL}/api/report/download/${report.id}?${params.toString()}`, "_blank");
   };
 
   return (

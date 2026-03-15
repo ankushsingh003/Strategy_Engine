@@ -35,7 +35,7 @@ export default function ChatPage() {
         </Link>
         <div>
           <h1 className="text-2xl font-bold">AI Consultant Chat</h1>
-          <p className="text-slate-400 text-sm">Powered by Claude 3.5 Models</p>
+          <p className="text-slate-400 text-sm">Powered by Gemini 1.5 Flash Models</p>
         </div>
       </header>
       

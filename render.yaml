@@ -1,0 +1,36 @@
+services:
+  # --- Backend Web Service (FastAPI) ---
+  - type: web
+    name: market-intel-backend
+    env: docker
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    plan: free # Change to pro for production scaling
+    region: oregon
+    healthCheckPath: /
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false # Set manually in Render dashboard
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+
+  # --- Frontend Web Service (Next.js) ---
+  - type: web
+    name: market-intel-frontend
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    dockerContext: ./frontend # Note: Render Next.js usually runs as node env
+    # No dockerfile needed for pure node env on Render
+    envVars:
+      - key: NEXT_PUBLIC_BACKEND_URL
+        fromService:
+          type: web
+          name: market-intel-backend
+          property: host

@@ -53,8 +53,10 @@ export default function RAGPage() {
     setQuery("");
     setIsLoading(true);
 
+    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+
     try {
-      const resp = await fetch("http://localhost:8000/api/rag/query", {
+      const resp = await fetch(`${BACKEND_URL}/api/rag/query`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: finalQuery, industry: "general" })
