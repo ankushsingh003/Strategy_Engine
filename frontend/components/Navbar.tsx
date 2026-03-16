@@ -27,74 +27,83 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 h-[--navbar-height] bg-slate-950/80 backdrop-blur-2xl border-b border-slate-800/50 z-50 flex items-center px-4 md:px-8 justify-between">
-        {/* Logo */}
-        <div className="flex items-center gap-3 md:gap-8">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="h-8 w-8 bg-emerald-500 rounded-lg flex items-center justify-center shrink-0">
-              <Layers className="text-white w-5 h-5" />
+      {/* Floating Island Navbar */}
+      <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 md:px-8">
+        <div className="max-w-7xl w-full flex justify-between items-center bg-white/80 dark:bg-[#143D2C]/90 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-2xl rounded-[32px] px-6 py-3 h-20">
+          
+          {/* Left: Logo & Menu Toggle */}
+          <div className="flex items-center gap-6">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="h-10 w-10 bg-[#A1F28B] rounded-full flex items-center justify-center shrink-0 transition-transform group-hover:rotate-12">
+                <Layers className="text-[#143D2C] w-6 h-6" />
+              </div>
+              <div className="flex flex-col -gap-1">
+                <span className="text-lg font-black tracking-tighter dark:text-white uppercase">Vantage <span className="text-[#A1F28B]">AI</span></span>
+                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-300 tracking-[0.2em] uppercase">Intelligence</span>
+              </div>
+            </Link>
+
+            <div className="hidden lg:block h-8 w-px bg-slate-200 dark:bg-white/10 mx-2" />
+
+            {/* Desktop Nav Items */}
+            <div className="hidden lg:flex items-center gap-2">
+              {navItems.map((item) => {
+                const isActive = item.href === "/" 
+                  ? pathname === "/" 
+                  : pathname.startsWith(item.href);
+                  
+                return (
+                  <Link key={item.name} href={item.href}>
+                    <div className={`
+                      flex items-center gap-2 px-4 py-2 rounded-full transition-all relative group
+                      ${isActive ? 'dark:text-[#A1F28B] text-[#143D2C]' : 'text-slate-500 dark:text-slate-300 hover:text-black dark:hover:text-white'}
+                    `}>
+                      {isActive && (
+                        <motion.div 
+                          layoutId="navbar-active"
+                          className="absolute inset-0 bg-slate-100 dark:bg-white/5 rounded-full"
+                        />
+                      )}
+                      <item.icon className={`w-4 h-4 shrink-0 transition-colors ${isActive ? 'text-[#143D2C] dark:text-[#A1F28B]' : 'group-hover:text-[#143D2C] dark:group-hover:text-[#A1F28B]'}`} />
+                      <span className="font-bold text-xs uppercase tracking-widest whitespace-nowrap z-10">{item.name}</span>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
-            <span className="text-lg md:text-xl font-bold tracking-tight">Vantage <span className="text-emerald-500">AI</span></span>
-          </Link>
-
-          <div className="hidden md:block h-6 w-px bg-slate-800 mx-2" />
-
-          {/* Desktop Nav Items */}
-          <div className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => {
-              const isActive = item.href === "/" 
-                ? pathname === "/" 
-                : pathname.startsWith(item.href);
-                
-              return (
-                <Link key={item.name} href={item.href}>
-                  <div className={`
-                    flex items-center gap-2 px-3 lg:px-4 py-2 rounded-xl transition-all relative group
-                    ${isActive ? 'text-white' : 'text-slate-500 hover:text-slate-300'}
-                  `}>
-                    {isActive && (
-                      <motion.div 
-                        layoutId="navbar-active"
-                        className="absolute inset-0 bg-emerald-500/10 rounded-xl border border-emerald-500/20"
-                      />
-                    )}
-                    <item.icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-emerald-400' : 'group-hover:text-emerald-400/70'}`} />
-                    <span className="font-medium text-sm whitespace-nowrap">{item.name}</span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Right side: Status badge + mobile hamburger */}
-        <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-full border border-slate-800/50">
-            <div className="h-1.5 w-1.5 bg-emerald-500 rounded-full animate-pulse" />
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">System Active</span>
           </div>
 
-          {/* Hamburger — mobile only */}
-          <button
-            className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          {/* Right: Actions */}
+          <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-2 bg-slate-100 dark:bg-black/20 px-4 py-2 rounded-full border border-slate-200 dark:border-white/5">
+              <div className="h-2 w-2 bg-[#A1F28B] rounded-full animate-pulse shadow-[0_0_8px_rgba(161,242,139,0.8)]" />
+              <span className="text-[10px] font-black text-slate-500 dark:text-white/60 uppercase tracking-[0.15em] whitespace-nowrap">Core Engine Active</span>
+            </div>
+
+            <button
+              className="lg:hidden p-3 rounded-full bg-slate-100 dark:bg-white/5 text-[#143D2C] dark:text-white hover:bg-[#A1F28B] hover:text-[#143D2C] transition-all duration-300"
+              onClick={() => setMobileOpen(!mobileOpen)}
+            >
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+
+            <button className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-[#A1F28B] text-[#143D2C] rounded-full font-bold text-xs uppercase tracking-widest transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(161,242,139,0.4)] active:scale-95">
+              Contact Us <TrendingUp className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
-      </nav>
+      </div>
 
       {/* Mobile Dropdown */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="fixed top-[--navbar-height] left-0 right-0 z-40 bg-slate-950/95 backdrop-blur-2xl border-b border-slate-800/50 md:hidden"
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            className="fixed top-28 left-4 right-4 z-40 bg-white/95 dark:bg-[#143D2C]/95 backdrop-blur-2xl border border-slate-200 dark:border-white/10 rounded-[32px] p-6 lg:hidden shadow-2xl"
           >
-            <div className="flex flex-col p-4 gap-2">
+            <div className="flex flex-col gap-3">
               {navItems.map((item) => {
                 const isActive = item.href === "/" 
                   ? pathname === "/" 
@@ -105,17 +114,21 @@ export default function Navbar() {
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
                   >
-                    <div className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                    <div className={`flex items-center gap-4 px-6 py-4 rounded-2xl transition-all ${
                       isActive 
-                        ? 'bg-emerald-500/10 border border-emerald-500/20 text-white' 
-                        : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'
+                        ? 'bg-[#A1F28B] text-[#143D2C]' 
+                        : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'
                     }`}>
-                      <item.icon className={`w-5 h-5 ${isActive ? 'text-emerald-400' : ''}`} />
-                      <span className="font-medium">{item.name}</span>
+                      <item.icon className="w-5 h-5" />
+                      <span className="font-bold text-sm uppercase tracking-widest">{item.name}</span>
                     </div>
                   </Link>
                 );
               })}
+              <div className="h-px bg-slate-200 dark:bg-white/10 my-2" />
+              <button className="w-full flex justify-center items-center gap-2 px-6 py-4 bg-[#A1F28B] text-[#143D2C] rounded-2xl font-black text-sm uppercase tracking-widest">
+                Contact Strategy Team
+              </button>
             </div>
           </motion.div>
         )}

@@ -3,32 +3,41 @@
 @tailwind utilities;
 
 :root {
+  --foreground: #111827;
+  --background: #ffffff;
+  --bcg-green-dark: #143D2C;
+  --bcg-green-neon: #A1F28B;
+  --bcg-cream: #FBF9F4;
+  --navbar-height: 80px;
+  --radius-xl: 24px;
+}
+
+.dark {
   --foreground: #f8fafc;
   --background: #020617;
-  --navbar-height: 72px;
-  --accent-emerald: #10b981;
 }
 
 body {
   color: var(--foreground);
   background-color: var(--background);
-  background-image:
-    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.03) 0px, transparent 50%);
   min-height: 100vh;
-  background-attachment: fixed;
   overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
+}
+
+.bcg-glass {
+  @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/20 dark:border-slate-800/50 shadow-xl;
+  border-radius: var(--radius-xl);
 }
 
 .glass-card {
-  @apply bg-slate-900/40 backdrop-blur-xl border border-slate-800/60 rounded-2xl shadow-2xl;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  @apply bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm;
+  border-radius: var(--radius-xl);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-card:hover {
-  @apply border-slate-700/80 bg-slate-900/60;
-  transform: translateY(-2px);
+  @apply shadow-2xl scale-[1.01] border-bcg-green-neon/50;
 }
 
 .bento-grid {
