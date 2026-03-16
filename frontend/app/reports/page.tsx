@@ -53,6 +53,32 @@ interface Message {
   industrySlug?: string;
 }
 
+// Client-side instant industry detection (same keywords as backend mock)
+const detectIndustry = (text: string): string | undefined => {
+  const t = text.toLowerCase();
+  const map: Record<string, string[]> = {
+    oil:        ["oil", "oil & gas", "petroleum", "energy sector"],
+    tech:       ["tech", "technology", "saas", "software", "it sector"],
+    pharma:     ["pharma", "pharmaceutical", "drug", "biotech"],
+    cosmetics:  ["cosmetic", "beauty", "skincare", "personal care"],
+    finance:    ["finance", "banking", "fintech", "financial", "bank"],
+    retail:     ["retail", "consumer goods", "e-commerce", "ecommerce"],
+    real_estate:["real estate", "property", "realty", "housing"],
+    energy:     ["renewable", "solar", "wind energy", "clean energy"],
+    aviation:   ["aviation", "airline", "aerospace", "aircraft"],
+    logistics:  ["logistics", "supply chain", "shipping", "freight"],
+    agriculture:["agriculture", "farming", "agri", "crop"],
+    media:      ["media", "entertainment", "streaming", "broadcast"],
+    healthcare: ["healthcare", "hospital", "medical", "health"],
+    insurance:  ["insurance", "insurer", "underwriting"],
+    coal:       ["coal", "mining", "mineral"],
+    printing:   ["printing", "packaging", "print industry"],
+  };
+  for (const [slug, kws] of Object.entries(map)) {
+    if (kws.some(kw => t.includes(kw))) return slug;
+  }
+};
+
 export default function ConsultancyAgentPage() {
   const [messages, setMessages] = useState<Message[]>([
     { role: "assistant", text: "Welcome to Vantage Report Intelligence. I am your strategic analysis agent. Which industry report can I help you synthesize today?" }
@@ -80,44 +106,79 @@ export default function ConsultancyAgentPage() {
     setTimeout(() => setLoadingId(null), 3000);
   };
 
-  const handleSendMessage = async () => {
-    if (!input.trim()) return;
+  const handleSendMessage = async (overrideInput?: string) => {
+    const msgText = overrideInput ?? input;
+    if (!msgText.trim()) return;
 
-    const userMsg: Message = { role: "user", text: input };
+    // 1. Instantly detect industry from the user's OWN message
+    const instantSlug = detectIndustry(msgText);
+
+    // 2. Add user message immediately
+    const userMsg: Message = { role: "user", text: msgText };
     setMessages(prev => [...prev, userMsg]);
     setInput("");
     setIsTyping(true);
 
+    // 3. Show the industry card INSTANTLY (before AI responds)
+    if (instantSlug && INDUSTRIES[instantSlug]) {
+      const instantCard: Message = {
+        role: "assistant",
+        text: `Surfacing the **${INDUSTRIES[instantSlug].name}** Intelligence Asset. Synthesizing strategic analysis...`,
+        industrySlug: instantSlug
+      };
+      setMessages(prev => [...prev, instantCard]);
+    }
+
     try {
+      // 4. Fetch with 30s timeout so it never buffers forever
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
+      
       const response = await fetch(`${BACKEND_URL}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          message: input,
+          message: msgText,
           history: messages.map(m => ({ role: m.role, text: m.text }))
-        })
+        }),
+        signal: controller.signal
       });
+      clearTimeout(timeout);
 
       const data = await response.json();
       let reply = data.reply;
       
-      // Extract Industry Slug
-      let industrySlug = undefined;
+      // Extract Industry Slug from AI response (may differ from instant detection)
+      let industrySlug: string | undefined = instantSlug;
       const industryMatch = reply.match(/\[INDUSTRY:(.*?)\]/);
       if (industryMatch) {
-         industrySlug = industryMatch[1].toLowerCase();
-         reply = reply.replace(/\[INDUSTRY:.*?\]/, "").trim();
+        industrySlug = industryMatch[1].toLowerCase();
+        reply = reply.replace(/\[INDUSTRY:.*?\]/g, "").trim();
       }
 
-      const assistantMsg: Message = { 
-        role: "assistant", 
-        text: reply,
-        industrySlug
-      };
-      
-      setMessages(prev => [...prev, assistantMsg]);
-    } catch (err) {
-      setMessages(prev => [...prev, { role: "assistant", text: "I apologize, but I encountered a failure in my intelligence neural-link. Please try again." }]);
+      // Only add a new assistant message if there was no instant card, or replace with full response
+      if (!instantSlug) {
+        setMessages(prev => [...prev, { role: "assistant", text: reply, industrySlug }]);
+      } else {
+        // Update the instant card message with the real AI response text
+        setMessages(prev => {
+          const updated = [...prev];
+          const cardIdx = updated.findLastIndex(m => m.role === "assistant" && m.industrySlug === instantSlug);
+          if (cardIdx !== -1) {
+            updated[cardIdx] = { ...updated[cardIdx], text: reply };
+          } else {
+            updated.push({ role: "assistant", text: reply, industrySlug });
+          }
+          return updated;
+        });
+      }
+    } catch (err: any) {
+      const errMsg = err?.name === "AbortError"
+        ? "The intelligence synthesis timed out. Please try a simpler query or try again."
+        : "I encountered a failure in my neural-link. Please try again.";
+      if (!instantSlug) {
+        setMessages(prev => [...prev, { role: "assistant", text: errMsg }]);
+      }
     } finally {
       setIsTyping(false);
     }
@@ -155,7 +216,7 @@ export default function ConsultancyAgentPage() {
                  ].map((query, i) => (
                    <button 
                      key={i} 
-                     onClick={() => setInput(query)}
+                     onClick={() => handleSendMessage(query)}
                      className="w-full text-left p-3 rounded-xl hover:bg-slate-900 border border-transparent hover:border-slate-800 text-[11px] text-slate-400 transition-all"
                    >
                      {query}
