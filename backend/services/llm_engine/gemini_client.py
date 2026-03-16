@@ -54,13 +54,39 @@ class GeminiClient:
         return "Error: Maximum retries exceeded for LLM Service."
             
     def _mock_response(self, prompt: str) -> str:
-        # Detect industry slugs in the prompt for dynamic testing
-        slugs = ["oil", "tech", "pharma", "cosmetics", "finance", "retail", "real_estate", "energy", "aviation", "logistics", "agriculture", "media", "healthcare", "insurance", "coal", "printing"]
-        detected_slug = None
+        # Only detect industry from the LATEST user query, not conversation history
+        # Extract the last "User:" line to avoid contamination from old messages
+        last_user_line = ""
+        for line in prompt.split("\n"):
+            if line.strip().startswith("User:"):
+                last_user_line = line.lower()
         
-        lower_prompt = prompt.lower()
-        for slug in slugs:
-            if slug in lower_prompt:
+        # If no "User:" line found, fall back to the full prompt
+        search_text = last_user_line if last_user_line else prompt.lower()
+        
+        # Ordered by specificity to avoid partial matches (e.g., 'oil' in 'oil and gas')
+        slug_keywords = {
+            "oil": ["oil", "oil & gas", "oil and gas", "petroleum", "energy sector"],
+            "tech": ["tech", "technology", "saas", "software", "it sector"],
+            "pharma": ["pharma", "pharmaceutical", "drug", "biotech"],
+            "cosmetics": ["cosmetic", "beauty", "skincare", "personal care"],
+            "finance": ["finance", "banking", "fintech", "financial", "bank"],
+            "retail": ["retail", "consumer goods", "e-commerce", "ecommerce"],
+            "real_estate": ["real estate", "property", "realty", "housing"],
+            "energy": ["renewable", "solar", "wind energy", "clean energy"],
+            "aviation": ["aviation", "airline", "aerospace", "aircraft"],
+            "logistics": ["logistics", "supply chain", "shipping", "freight"],
+            "agriculture": ["agriculture", "farming", "agri", "crop"],
+            "media": ["media", "entertainment", "streaming", "broadcast"],
+            "healthcare": ["healthcare", "hospital", "medical", "health"],
+            "insurance": ["insurance", "insurer", "underwriting", "actuary"],
+            "coal": ["coal", "mining", "mineral", "extraction"],
+            "printing": ["printing", "packaging", "print industry"],
+        }
+        
+        detected_slug = None
+        for slug, keywords in slug_keywords.items():
+            if any(kw in search_text for kw in keywords):
                 detected_slug = slug
                 break
         

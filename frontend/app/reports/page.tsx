@@ -55,7 +55,7 @@ interface Message {
 
 export default function ConsultancyAgentPage() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", text: "Welcome to Vantage Strategic Chat. I am your agentic consultant. How can I assist your market intelligence research today?" }
+    { role: "assistant", text: "Welcome to Vantage Report Intelligence. I am your strategic analysis agent. Which industry report can I help you synthesize today?" }
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -131,7 +131,7 @@ export default function ConsultancyAgentPage() {
            <div className="h-10 w-10 bg-emerald-500/10 rounded-xl flex items-center justify-center border border-emerald-500/20">
               <Sparkles className="text-emerald-400 w-5 h-5" />
            </div>
-           <h2 className="font-bold text-lg">Agentic Chat</h2>
+           <h2 className="font-bold text-lg">Report Intelligence</h2>
         </div>
         
         <div className="space-y-6">
@@ -273,7 +273,7 @@ export default function ConsultancyAgentPage() {
               </div>
            </div>
            <p className="text-center text-[10px] text-slate-600 mt-4 uppercase tracking-widest font-bold">
-             AI Agentic Consultant • Powered by Gemini 1.5 Flash • Contextual RAG Enabled
+             Report Intelligence Agent • Powered by Gemini 1.5 Flash • Contextual RAG Enabled
            </p>
         </div>
       </div>
