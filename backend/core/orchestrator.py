@@ -91,6 +91,10 @@ class Orchestrator:
                 company_input=company_input
             )
         llm_latency_ms = (time.time() - llm_start) * 1000
+        
+        # Strip hidden metadata tags before rendering to PDF
+        import re
+        report_markdown = re.sub(r'\[INDUSTRY:[^\]]*\]', '', report_markdown).strip()
 
         # Trace LLM call in Langfuse
         lf_trace = langfuse_tracer.trace_llm_call(

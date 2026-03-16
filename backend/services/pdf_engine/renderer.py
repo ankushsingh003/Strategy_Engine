@@ -72,43 +72,105 @@ class PDFRenderer:
         pdf.set_text_color(30, 41, 59) # Slate 800
         
         lines = report_markdown.split("\n")
-        print(f"DEBUG: Starting content parsing for {len(lines)} lines")
+        in_code_block = False
+        
         for line in lines:
-            line = line.strip()
-            if not line:
+            line_stripped = line.strip()
+            
+            # Toggle code block mode
+            if line_stripped.startswith("```"):
+                in_code_block = not in_code_block
+                if in_code_block:
+                    pdf.ln(3)
+                    pdf.set_fill_color(241, 245, 249)
+                    pdf.set_font("courier", "B", 8)
+                    pdf.set_text_color(51, 65, 85)
+                else:
+                    pdf.set_font("helvetica", size=11)
+                    pdf.set_text_color(30, 41, 59)
+                    pdf.ln(3)
+                continue
+            
+            if in_code_block:
+                # Render monospaced for flowcharts, handle non-latin chars gracefully
+                clean_line = line.encode("latin-1", errors="replace").decode("latin-1")
+                pdf.set_fill_color(241, 245, 249)
+                pdf.set_x(15)
+                pdf.cell(180, 5.5, clean_line, ln=True, fill=True)
+                continue
+            
+            # Skip empty lines
+            if not line_stripped:
                 pdf.ln(4)
                 continue
-                
-            if line.startswith("# "):
+            
+            # Skip leftover metadata tags
+            if line_stripped.startswith("[INDUSTRY:"):
+                continue
+            
+            # Markdown table rows
+            if line_stripped.startswith("|"):
+                pdf.set_font("helvetica", size=8)
+                pdf.set_text_color(30, 41, 59)
+                # Strip leading/trailing pipes and split
+                cells = [c.strip() for c in line_stripped.strip("|").split("|")]
+                col_w = 180 / max(len(cells), 1)
+                is_header = all(set(c.replace("-","").replace(":","").strip()) == set() or c.strip().startswith("-") for c in cells)
+                if is_header:
+                    continue  # skip separator rows
+                is_bold = any(c.isupper() or c.startswith("**") for c in cells)
+                pdf.set_font("helvetica", "B" if is_bold else "", 8)
+                for cell in cells:
+                    pdf.cell(col_w, 7, cell[:35], border=1, ln=False)
+                pdf.ln()
+                pdf.set_font("helvetica", size=11)
+                pdf.set_text_color(30, 41, 59)
+                continue
+            
+            # H1
+            if line_stripped.startswith("# "):
                 pdf.ln(8)
-                pdf.set_font("helvetica", "B", 20)
+                pdf.set_font("helvetica", "B", 18)
                 pdf.set_text_color(15, 23, 42)
-                # Drawing a subtle accent line under headers
                 curr_y = pdf.get_y()
-                pdf.line(10, curr_y + 11, 60, curr_y + 11)
-                pdf.cell(0, 12, line[2:].upper(), ln=True)
+                pdf.set_draw_color(16, 185, 129)
+                pdf.line(10, curr_y + 10, 70, curr_y + 10)
+                pdf.multi_cell(0, 12, line_stripped[2:].upper())
                 pdf.ln(3)
                 pdf.set_font("helvetica", size=11)
                 pdf.set_text_color(30, 41, 59)
-            elif line.startswith("## ") or line.startswith("### "):
-                pdf.ln(3)
+            # H2
+            elif line_stripped.startswith("## "):
+                pdf.ln(5)
                 pdf.set_font("helvetica", "B", 14)
-                pdf.set_text_color(51, 65, 85) # Slate 600
-                pdf.cell(0, 10, line.strip("# "), ln=True)
+                pdf.set_text_color(16, 185, 129)
+                pdf.multi_cell(0, 10, line_stripped[3:])
                 pdf.set_font("helvetica", size=11)
                 pdf.set_text_color(30, 41, 59)
-            elif line.startswith("- ") or line.startswith("* "):
+            # H3
+            elif line_stripped.startswith("### "):
+                pdf.ln(3)
+                pdf.set_font("helvetica", "B", 12)
+                pdf.set_text_color(51, 65, 85)
+                pdf.multi_cell(0, 9, line_stripped[4:])
+                pdf.set_font("helvetica", size=11)
+                pdf.set_text_color(30, 41, 59)
+            # Bullets
+            elif line_stripped.startswith("- ") or line_stripped.startswith("* "):
                 pdf.set_x(15)
-                # Use a cleaner bullet point
                 pdf.set_font("helvetica", "B", 11)
                 pdf.cell(5, 7, ">", ln=False)
                 pdf.set_font("helvetica", size=11)
-                pdf.multi_cell(0, 7, line[2:])
+                pdf.multi_cell(0, 7, line_stripped[2:])
+            # Numbered lists
+            elif len(line_stripped) > 2 and line_stripped[0].isdigit() and line_stripped[1] in ".):":
+                pdf.set_x(15)
+                pdf.set_font("helvetica", size=11)
+                pdf.multi_cell(0, 7, line_stripped)
             else:
-                pdf.multi_cell(0, 7, line)
+                pdf.set_font("helvetica", size=11)
+                pdf.multi_cell(0, 7, line_stripped)
                 pdf.ln(1)
-        
-        print("DEBUG: Content parsing complete")
 
         # --- Footer ---
         pdf.set_y(-20)
