@@ -18,27 +18,28 @@ import {
   Film,
   HeartPulse,
   BadgeDollarSign,
+  Database,
 } from "lucide-react";
 import { motion, Variants } from "framer-motion";
 
 export default function Home() {
   const industries = [
-    { id: "cosmetics",    name: "Cosmetics & Beauty",    icon: <Beaker className="w-7 h-7" />,          color: "text-pink-400",   bg: "bg-pink-500/10 border-pink-500/20" },
-    { id: "pharma",       name: "Pharmaceuticals",        icon: <Activity className="w-7 h-7" />,         color: "text-blue-400",   bg: "bg-blue-500/10 border-blue-500/20" },
-    { id: "tech",         name: "Technology & IT",         icon: <Cpu className="w-7 h-7" />,              color: "text-cyan-400",   bg: "bg-cyan-500/10 border-cyan-500/20" },
-    { id: "printing",     name: "Commercial Printing",     icon: <Printer className="w-7 h-7" />,          color: "text-slate-400",  bg: "bg-slate-500/10 border-slate-500/20" },
-    { id: "oil",          name: "Oil & Gas",               icon: <Fuel className="w-7 h-7" />,             color: "text-amber-400",  bg: "bg-amber-500/10 border-amber-500/20" },
-    { id: "coal",         name: "Coal & Mining",           icon: <Factory className="w-7 h-7" />,          color: "text-stone-400",  bg: "bg-stone-500/10 border-stone-500/20" },
-    { id: "finance",      name: "Finance & Banking",       icon: <Landmark className="w-7 h-7" />,         color: "text-emerald-400",bg: "bg-emerald-500/10 border-emerald-500/20" },
-    { id: "retail",       name: "Retail & E-commerce",     icon: <ShoppingCart className="w-7 h-7" />,     color: "text-orange-400", bg: "bg-orange-500/10 border-orange-500/20" },
-    { id: "real_estate",  name: "Real Estate",             icon: <Building2 className="w-7 h-7" />,        color: "text-violet-400", bg: "bg-violet-500/10 border-violet-500/20" },
-    { id: "energy",       name: "Renewable Energy",        icon: <Zap className="w-7 h-7" />,              color: "text-lime-400",   bg: "bg-lime-500/10 border-lime-500/20" },
-    { id: "aviation",     name: "Aviation & Aerospace",    icon: <Plane className="w-7 h-7" />,            color: "text-sky-400",    bg: "bg-sky-500/10 border-sky-500/20" },
-    { id: "logistics",    name: "Logistics & Supply Chain",icon: <Truck className="w-7 h-7" />,            color: "text-yellow-400", bg: "bg-yellow-500/10 border-yellow-500/20" },
-    { id: "agriculture",  name: "Agriculture & Food",      icon: <Leaf className="w-7 h-7" />,             color: "text-green-400",  bg: "bg-green-500/10 border-green-500/20" },
-    { id: "media",        name: "Media & Entertainment",   icon: <Film className="w-7 h-7" />,             color: "text-rose-400",   bg: "bg-rose-500/10 border-rose-500/20" },
-    { id: "healthcare",   name: "Healthcare Services",     icon: <HeartPulse className="w-7 h-7" />,       color: "text-red-400",    bg: "bg-red-500/10 border-red-500/20" },
-    { id: "insurance",    name: "Insurance & FinTech",     icon: <BadgeDollarSign className="w-7 h-7" />,  color: "text-teal-400",   bg: "bg-teal-500/10 border-teal-500/20" },
+    { id: "cosmetics",    name: "Cosmetics & Beauty",      icon: <Beaker strokeWidth={2.5} className="w-7 h-7" />,          color: "text-pink-400",   bg: "bg-pink-500/10 border-pink-500/20" },
+    { id: "pharma",       name: "Pharmaceuticals",         icon: <Activity strokeWidth={2.5} className="w-7 h-7" />,         color: "text-blue-400",   bg: "bg-blue-500/10 border-blue-500/20" },
+    { id: "tech",         name: "Technology & IT",         icon: <Cpu strokeWidth={2.5} className="w-7 h-7" />,              color: "text-cyan-400",   bg: "bg-cyan-500/10 border-cyan-500/20" },
+    { id: "printing",     name: "Commercial Printing",     icon: <Printer strokeWidth={2.5} className="w-7 h-7" />,          color: "text-slate-400",  bg: "bg-slate-500/10 border-slate-500/20" },
+    { id: "oil",          name: "Oil & Gas",               icon: <Fuel strokeWidth={2.5} className="w-7 h-7" />,             color: "text-amber-400",  bg: "bg-amber-500/10 border-amber-500/20" },
+    { id: "coal",         name: "Coal & Mining",           icon: <Factory strokeWidth={2.5} className="w-7 h-7" />,          color: "text-stone-400",  bg: "bg-stone-500/10 border-stone-500/20" },
+    { id: "finance",      name: "Finance & Banking",       icon: <Landmark strokeWidth={2.5} className="w-7 h-7" />,         color: "text-emerald-400",bg: "bg-emerald-500/10 border-emerald-500/20" },
+    { id: "retail",       name: "Retail & E-commerce",     icon: <ShoppingCart strokeWidth={2.5} className="w-7 h-7" />,     color: "text-orange-400", bg: "bg-orange-500/10 border-orange-500/20" },
+    { id: "real_estate",  name: "Real Estate",             icon: <Building2 strokeWidth={2.5} className="w-7 h-7" />,        color: "text-violet-400", bg: "bg-violet-500/10 border-violet-500/20" },
+    { id: "energy",       name: "Renewable Energy",        icon: <Zap strokeWidth={2.5} className="w-7 h-7" />,              color: "text-lime-400",   bg: "bg-lime-500/10 border-lime-500/20" },
+    { id: "aviation",     name: "Aviation & Aerospace",    icon: <Plane strokeWidth={2.5} className="w-7 h-7" />,            color: "text-sky-400",    bg: "bg-sky-500/10 border-sky-500/20" },
+    { id: "logistics",    name: "Logistics & Supply Chain",icon: <Truck strokeWidth={2.5} className="w-7 h-7" />,            color: "text-yellow-400", bg: "bg-yellow-500/10 border-yellow-500/20" },
+    { id: "agriculture",  name: "Agriculture & Food",      icon: <Leaf strokeWidth={2.5} className="w-7 h-7" />,             color: "text-green-400",  bg: "bg-green-500/10 border-green-500/20" },
+    { id: "media",        name: "Media & Entertainment",   icon: <Film strokeWidth={2.5} className="w-7 h-7" />,             color: "text-rose-400",   bg: "bg-rose-500/10 border-rose-500/20" },
+    { id: "healthcare",   name: "Healthcare Services",     icon: <HeartPulse strokeWidth={2.5} className="w-7 h-7" />,       color: "text-red-400",    bg: "bg-red-500/10 border-red-500/20" },
+    { id: "insurance",    name: "Insurance & FinTech",     icon: <BadgeDollarSign strokeWidth={2.5} className="w-7 h-7" />,  color: "text-teal-400",   bg: "bg-teal-500/10 border-teal-500/20" },
   ];
 
   const container: Variants = {
@@ -51,34 +52,75 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white px-8 py-16">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        className="text-center mb-16"
-      >
-        <div className="inline-flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-full mb-6">
-          <Zap className="w-3 h-3" /> Vantage AI — Market Intelligence Engine
-        </div>
-        <h1 className="text-5xl md:text-6xl font-bold tracking-tighter mb-4 bg-gradient-to-br from-white via-slate-200 to-slate-500 bg-clip-text text-transparent">
-          Select an Industry
-        </h1>
-        <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-          Run real-time predictive ML models, competitive intelligence, and generate board-ready
-          consultancy reports for any sector.
-        </p>
-      </motion.div>
+    <main className="min-h-screen bg-slate-950 text-white overflow-hidden pb-16 pt-[calc(var(--navbar-height)+2rem)]">
+      
+      {/* Hero Section */}
+      <section className="max-w-7xl mx-auto px-6 lg:px-8 pt-12 pb-24 relative">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Grid */}
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-7xl mx-auto"
-      >
-        {industries.map((ind) => (
+        <div className="text-center max-w-4xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-full mb-8"
+          >
+            <Zap className="w-4 h-4" /> The Future of Market Intelligence
+          </motion.div>
+
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-5xl md:text-7xl font-extrabold tracking-tighter mb-8 bg-gradient-to-br from-white via-slate-200 to-slate-500 bg-clip-text text-transparent"
+          >
+            Strategic Clarity at <br className="hidden md:block"/> Algorithmic Speed.
+          </motion.h1>
+
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-12"
+          >
+            Vantage AI is an enterprise-grade intelligence engine. We ingest millions of unstructured signals and transform them into board-ready consultancy reports, competitor power rankings, and live market forecasts.
+          </motion.p>
+          
+          <motion.div
+             initial={{ opacity: 0, scale: 0.9 }}
+             animate={{ opacity: 1, scale: 1 }}
+             transition={{ delay: 0.3 }}
+             className="flex flex-wrap justify-center gap-4"
+          >
+              <div className="flex items-center gap-2 text-sm text-slate-300 font-medium px-4 py-2 bg-slate-900/50 rounded-xl border border-slate-800">
+                <Cpu className="w-4 h-4 text-cyan-400" /> Machine Learning Ensemble
+              </div>
+              <div className="flex items-center gap-2 text-sm text-slate-300 font-medium px-4 py-2 bg-slate-900/50 rounded-xl border border-slate-800">
+                <Activity className="w-4 h-4 text-rose-400" /> Live Sentiment Analysis
+              </div>
+              <div className="flex items-center gap-2 text-sm text-slate-300 font-medium px-4 py-2 bg-slate-900/50 rounded-xl border border-slate-800">
+                <Database className="w-4 h-4 text-emerald-400" /> Contextual RAG
+              </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Select an Industry Section */}
+      <section className="max-w-7xl mx-auto px-6 lg:px-8 border-t border-slate-800/50 pt-16">
+        <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
+              Explore Sectors
+            </h2>
+            <p className="text-slate-500">Select an industry to run live API diagnostics.</p>
+        </div>
+
+        {/* Grid */}
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+        >        {industries.map((ind) => (
           <motion.div key={ind.id} variants={item}>
             <Link
               href={`/dashboard/${ind.id}`}
