@@ -123,11 +123,11 @@ export default function AssistanceSection() {
               initial={{ scale: 1.1, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               transition={{ duration: 1.2 }}
-              src="/soft_waves.png"
+              src="/assistance_visual.png"
               alt="Assistance Visual"
               className="w-full h-full object-cover"
             />
-            {/* Smooth transition overlays - adjusted for softer visual */}
+            {/* Smooth transition overlays */}
             <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-transparent pointer-events-none" />
             <div className="absolute inset-0 shadow-[inset_0_0_120px_rgba(10,15,30,0.85)] pointer-events-none" />
             <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#0a0f1e] to-transparent opacity-60 pointer-events-none" />
