@@ -134,8 +134,9 @@ class IntelligenceService:
             Context: {context}
             Task: Provide a holistic 'Master Strategic Synthesis'.
             Constraint: Output exactly TWO technical, high-impact lines. 
-            Focus: Interplay between digital-first infrastructure (FHIR), regulatory safety, and M&A growth.
-            Style: Sharp, professional, zero fluff.
+            CRITICAL: Do NOT mention any API names, website names, or technical protocol names (No CMS, FDA, FHIR, HL7, FMP). 
+            Focus: Interplay between digital-first infrastructure, regulatory safety, and strategic M&A growth.
+            Style: Sharp, professional, zero fluff. Use purely strategic business language.
             """
             chat_completion = self.client.chat.completions.create(
                 messages=[{"role": "user", "content": prompt}],

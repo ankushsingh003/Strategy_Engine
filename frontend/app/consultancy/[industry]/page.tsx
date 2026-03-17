@@ -183,10 +183,10 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
                     <div className="h-16 opacity-30 group-hover:opacity-60 transition-opacity">
                        <MiniChart data={panel.data?.trends || [1,2,3]} color={panel.stroke} />
                     </div>
-                    <div className="pt-4 border-t border-white/5 flex justify-between items-center opacity-60 text-[10px] font-mono uppercase tracking-widest">
-                       <span>SOURCE // {panel.src}</span>
-                       <span className="text-emerald-400">ACTIVE_FEED</span>
-                    </div>
+                     <div className="pt-4 border-t border-white/5 flex justify-between items-center opacity-60 text-[10px] font-mono uppercase tracking-widest">
+                        <span>INTELLIGENCE // REAL_TIME</span>
+                        <span className="text-emerald-400">ACTIVE_FEED</span>
+                     </div>
                   </div>
                </div>
             </motion.div>
@@ -309,8 +309,8 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
                                    </div>
                                  </div>
                                  <div className="text-right">
-                                   <span className="text-xs font-mono opacity-40">TICKER: {panels[activePanel].src}</span>
-                                 </div>
+                                <span className="text-xs font-mono opacity-40">SIGNAL_ID: {activePanel + 1024}</span>
+                              </div>
                                </div>
                                
                                <div className="bg-[#020617] rounded-3xl p-8 border border-white/5 shadow-inner">
@@ -362,8 +362,8 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
         {/* Dashboard Footer */}
         <footer className="mt-16 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 opacity-30 font-mono text-[10px] tracking-widest pb-12">
            <div className="flex gap-8">
-              <span>ENGINE // llama-3.3-70b-versatile</span>
-              <span>INFERENCE_SRC // GROQ-CLOUD</span>
+              <span>CORE // STRATEGIC_INTELLIGENCE_LAYER</span>
+              <span>SYNTHESIS // DYNAMIC_ENGINE</span>
            </div>
            <div>ENGINEERED BY ANKUSH KUMAR SINGH</div>
         </footer>
