@@ -56,33 +56,33 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-white dark:bg-[#020617] text-[#143D2C] dark:text-white overflow-hidden pb-16 pt-32">
       
-      {/* BCG Style Split Hero Section */}
-      <section className="max-w-[1440px] mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-12 items-center py-12 lg:py-24">
-        <div className="relative z-10 flex flex-col items-start gap-8">
+      {/* BCG Style Center-Aligned Hero Section */}
+      <section className="max-w-[1440px] mx-auto px-6 lg:px-12 flex flex-col items-center text-center py-12 lg:py-24 gap-12">
+        <div className="relative z-10 flex flex-col items-center gap-8 w-full max-w-4xl">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2 text-[#143D2C] dark:text-[#A1F28B] text-xs font-black uppercase tracking-[0.3em]"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex items-center gap-3 text-[#143D2C] dark:text-[#A1F28B] text-xs font-black uppercase tracking-[0.4em]"
           >
             <div className="w-12 h-[2px] bg-[#A1F28B]" />
             Market Intelligence Platform
+            <div className="w-12 h-[2px] bg-[#A1F28B]" />
           </motion.div>
 
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-5xl md:text-7xl font-black tracking-tighter leading-[0.9] text-[#143D2C] dark:text-white"
+            className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.8] text-[#143D2C] dark:text-white"
           >
-            STRATEGIC <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#143D2C] to-slate-500 dark:from-[#A1F28B] dark:to-white">CLARITY.</span>
+            STRATEGIC <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#143D2C] to-slate-500 dark:from-[#A1F28B] dark:to-white">CLARITY.</span>
           </motion.h1>
 
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-slate-600 dark:text-slate-400 text-xl max-w-xl leading-relaxed font-medium"
+            className="text-slate-600 dark:text-slate-400 text-xl md:text-2xl max-w-3xl leading-relaxed font-medium"
           >
             Harness the power of AI-driven market analysis. We transform complex data signals into high-impact strategic insights for global enterprises.
           </motion.p>
@@ -95,126 +95,124 @@ export default function Home() {
           >
             <Link 
               href="#industries"
-              className="group flex items-center gap-4 bg-[#A1F28B] text-[#143D2C] px-8 py-4 rounded-full font-black uppercase tracking-widest text-sm transition-all hover:scale-105 hover:shadow-2xl"
+              className="group flex items-center gap-4 bg-[#A1F28B] text-[#143D2C] px-10 py-5 rounded-full font-black uppercase tracking-widest text-sm transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(161,242,139,0.3)]"
             >
               Explore Our Expertise
-              <div className="w-8 h-8 bg-[#143D2C] text-[#A1F28B] rounded-full flex items-center justify-center transition-transform group-hover:translate-x-1">
-                <TrendingUp className="w-4 h-4" />
+              <div className="w-10 h-10 bg-[#143D2C] text-[#A1F28B] rounded-full flex items-center justify-center transition-transform group-hover:translate-x-1">
+                <TrendingUp className="w-5 h-5" />
               </div>
             </Link>
           </motion.div>
         </div>
 
-        {/* Premium Hero Visual Column - Neural Intelligence Console Redesign */}
+        {/* Premium Hero Visual - Neural Intelligence Console (Horizontal Layout) */}
         <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="relative h-[450px] lg:h-[600px] w-full bg-[#020617] rounded-[32px] overflow-hidden border border-emerald-500/20 shadow-[0_0_50px_rgba(16,185,129,0.1)] group"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: "easeOut", delay: 0.4 }}
+          className="relative h-[400px] w-full max-w-[1200px] bg-slate-900/40 dark:bg-slate-800/20 backdrop-blur-3xl rounded-[40px] overflow-hidden border border-emerald-500/20 shadow-[0_0_60px_rgba(16,185,129,0.05)] group"
         >
           {/* Scanning Beam Animation */}
           <motion.div 
             animate={{ top: ["0%", "100%", "0%"] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-            className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent z-20 pointer-events-none"
+            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+            className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-emerald-400/30 to-transparent z-20 pointer-events-none"
           />
 
-          <div className="absolute inset-0 p-8 flex flex-col justify-between relative z-10">
-            {/* Top Metadata Header */}
-            <div className="flex justify-between items-start">
+          <div className="absolute inset-0 p-10 grid grid-cols-1 md:grid-cols-3 gap-8 items-center relative z-10">
+            {/* Left: Engine Identity & Metadata */}
+            <div className="flex flex-col gap-6 text-left order-2 md:order-1">
               <div className="flex flex-col gap-1">
-                <span className="text-[10px] font-black text-emerald-500/60 uppercase tracking-[0.3em]">Global Strategy Unit</span>
-                <h3 className="text-3xl font-black text-white tracking-tighter leading-none">
-                  NEURAL <br /> INTELLIGENCE <br /> ENGINE
+                <span className="text-[10px] font-black text-emerald-500/60 uppercase tracking-[0.4em]">Global Strategy Unit</span>
+                <h3 className="text-4xl font-black text-white tracking-tighter leading-none">
+                  NEURAL ENGINE
                 </h3>
                 <div className="flex items-center gap-2 mt-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-[9px] font-bold text-emerald-500/80 uppercase tracking-widest">Core Consult Unit Active</span>
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Active Intelligence</span>
                 </div>
               </div>
 
-              <div className="text-right font-mono text-[8px] text-emerald-500/40 flex flex-col gap-1">
-                <div className="flex justify-between gap-4"><span>SYS_ARCH:</span> <span>VECTOR_RAG_V2</span></div>
-                <div className="flex justify-between gap-4"><span>LATENCY:</span> <span>42ms</span></div>
-                <div className="flex justify-between gap-4"><span>THROUGHPUT:</span> <span>1.2M/s</span></div>
-                <div className="mt-2 text-emerald-500/60">
-                  <span>CLUSTER: SLC_FILINGS_DB</span> <br />
-                  <span>SYNC: 100%</span> <br />
-                  <span>TRACING: LANGFUSE_ENABLED</span>
-                </div>
+              {/* Dynamic Log Feed (Small Version) */}
+              <div className="bg-black/40 backdrop-blur-md rounded-2xl p-4 border border-emerald-500/10 font-mono text-[9px] h-20 overflow-hidden relative">
+                <motion.div 
+                  animate={{ y: [-120, 0] }}
+                  transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                  className="flex flex-col gap-1.5"
+                >
+                  <span className="text-amber-500/60">[WARN] Market shift detected</span>
+                  <span className="text-emerald-500/60">[INFO] Synthesizing data...</span>
+                  <span className="text-emerald-400">[READY] Strategic roadmap</span>
+                  <span className="text-slate-500">[ANALYSIS] RAG Context 0.98</span>
+                  <span className="text-blue-400">[VECTOR] New node added</span>
+                </motion.div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
               </div>
             </div>
 
-            {/* Central Neural Sphere Visual */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="relative">
+            {/* Center: Neural Core Sphere */}
+            <div className="flex items-center justify-center order-1 md:order-2">
+              <div className="relative scale-110 md:scale-125">
                 {/* Outer Rotating Rings */}
                 <motion.div 
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-[-60px] border border-emerald-500/10 rounded-full"
+                  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-[-50px] border border-emerald-500/10 rounded-full"
                 />
                 <motion.div 
                   animate={{ rotate: -360 }}
-                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-[-40px] border border-emerald-500/20 rounded-full border-dashed"
+                  transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-[-30px] border border-emerald-400/20 rounded-full border-dashed"
                 />
                 
                 {/* Inner Glowing Core */}
-                <div className="relative w-40 h-40 flex items-center justify-center">
+                <div className="relative w-32 h-32 flex items-center justify-center">
                   <motion.div 
-                    animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
+                    animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.4, 0.2] }}
                     transition={{ duration: 4, repeat: Infinity }}
-                    className="absolute inset-0 bg-emerald-500/20 rounded-full blur-3xl"
+                    className="absolute inset-0 bg-emerald-400/20 rounded-full blur-3xl"
                   />
-                  <div className="w-32 h-32 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full p-0.5 shadow-[0_0_40px_rgba(52,211,153,0.4)]">
-                    <div className="w-full h-full bg-[#020617] rounded-full flex items-center justify-center overflow-hidden relative">
-                      <div className="absolute inset-0 opacity-20" 
-                           style={{ backgroundImage: `radial-gradient(#10b981 1px, transparent 1px)`, backgroundSize: '8px 8px' }} />
-                      <Zap className="w-16 h-16 text-emerald-400 relative z-10" />
+                  <div className="w-28 h-28 bg-gradient-to-br from-emerald-400/80 to-emerald-600/80 rounded-full p-0.5 shadow-[0_0_50px_rgba(52,211,153,0.3)]">
+                    <div className="w-full h-full bg-[#0f172a] rounded-full flex items-center justify-center overflow-hidden relative border border-white/5">
+                      <div className="absolute inset-0 opacity-10" 
+                           style={{ backgroundImage: `radial-gradient(#10b981 1px, transparent 1px)`, backgroundSize: '10px 10px' }} />
+                      <Zap className="w-12 h-12 text-emerald-300 relative z-10" />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Bottom Section: Logs and Metrics */}
-            <div className="flex items-end justify-between gap-6">
-              {/* Dynamic Log Feed */}
-              <div className="flex-1 bg-black/40 backdrop-blur-md rounded-xl p-4 border border-emerald-500/10 font-mono text-[9px] h-24 overflow-hidden relative">
-                <motion.div 
-                  animate={{ y: [-100, 0] }}
-                  transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                  className="flex flex-col gap-1.5"
-                >
-                  <span className="text-amber-500/80">[WARN] High volatility detected,</span>
-                  <span className="text-emerald-500/80">[INFO] Generating strategy paths,</span>
-                  <span className="text-emerald-400 font-bold">[SUCCESS] Strategic roadmap ready for review</span>
-                  <span className="text-slate-500">[DATA] Ingesting real-time market signals...</span>
-                  <span className="text-blue-400">[RAG] Vector similarity search complete.</span>
-                  <span className="text-emerald-500/80">[INFO] Synthesizing Q4 SEC filings...</span>
-                </motion.div>
-                <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent pointer-events-none" />
-              </div>
+            {/* Right: Strategy Metrics Card */}
+            <div className="flex flex-col gap-6 order-3">
+               <div className="bg-white/5 backdrop-blur-2xl rounded-[32px] p-8 border border-white/10 flex flex-col gap-4 shadow-2xl items-start text-left">
+                  <div className="flex flex-col gap-1 w-full">
+                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-white/5 pb-2">Strategy Accuracy:</span>
+                     <div className="flex items-baseline gap-2 mt-2">
+                        <span className="text-5xl font-black text-white">98.2%</span>
+                        <div className="flex items-center gap-1 text-emerald-400 text-[10px] font-black">
+                           <TrendingUp className="w-3 h-3" /> +2.4%
+                        </div>
+                     </div>
+                  </div>
+                  
+                  <div className="flex flex-col gap-1 w-full">
+                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-white/5 pb-2">Roadside Insights:</span>
+                     <span className="text-3xl font-black text-white tabular-nums mt-1">3.1M+</span>
+                  </div>
 
-              {/* Accuracy & Insights Card */}
-              <div className="w-1/2 bg-white/5 backdrop-blur-xl rounded-2xl p-5 border border-white/10 flex flex-col gap-3 shadow-2xl">
-                 <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                    <div className="flex flex-col">
-                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Strategy Accuracy:</span>
-                       <span className="text-3xl font-black text-white">98.2%</span>
-                    </div>
-                 </div>
-                 <div className="flex justify-between items-center">
-                    <div className="flex flex-col">
-                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Roadside Insights:</span>
-                       <span className="text-2xl font-black text-white tabular-nums">3.1M</span>
-                    </div>
-                    <TrendingUp className="w-6 h-6 text-emerald-400" />
-                 </div>
-                 <div className="text-[9px] text-center text-emerald-500/60 font-bold uppercase tracking-[0.2em] mt-1 italic">xprilion consultancy</div>
-              </div>
+                  <div className="w-full text-center text-emerald-500/40 text-[9px] font-black uppercase tracking-[0.3em] mt-2 italic">xprilion consultancy</div>
+               </div>
             </div>
+          </div>
+          
+          {/* Subtle Bottom Metadata Line */}
+          <div className="absolute bottom-6 left-10 right-10 flex justify-between items-center opacity-30 font-mono text-[8px] dark:text-emerald-400 tracking-tighter">
+             <div className="flex gap-6">
+                <span>V_V2 // ACC_98 // LT_42MS</span>
+                <span>SYNC_OK // LANGF_ENABLED</span>
+             </div>
+             <div>SLC_FILINGS_DB // ENSEMBLE_R04</div>
           </div>
         </motion.div>
       </section>
