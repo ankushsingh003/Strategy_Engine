@@ -12,7 +12,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 
 const navItems = [
   { name: "Home", icon: LayoutDashboard, href: "/" },
@@ -24,11 +24,30 @@ const navItems = [
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() || 0;
+    if (latest > previous && latest > 150) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
+  });
 
   return (
     <>
       {/* Floating Island Navbar */}
-      <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 md:px-6">
+      <motion.div 
+        variants={{
+          visible: { y: 0, opacity: 1 },
+          hidden: { y: -120, opacity: 0 },
+        }}
+        animate={hidden ? "hidden" : "visible"}
+        transition={{ duration: 0.35, ease: "easeInOut" }}
+        className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 md:px-6"
+      >
         <div className="max-w-7xl w-full flex justify-between items-center bg-white/80 dark:bg-[#143D2C]/90 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-2xl rounded-[32px] px-4 md:px-6 py-3 h-20 overflow-hidden">
           
           {/* Left: Logo & Menu Toggle */}
@@ -92,7 +111,7 @@ export default function Navbar() {
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Mobile Dropdown */}
       <AnimatePresence>
