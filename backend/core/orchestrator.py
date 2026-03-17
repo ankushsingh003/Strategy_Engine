@@ -110,7 +110,8 @@ class Orchestrator:
         Industry CAGR: {market_data['micro'].get('industry_cagr')}%
         Sentiment: {market_data['sentiment'].get('social_sentiment_score')}
         
-        Task: Provide a 2-sentence hard-hitting strategic verdict.
+        Task: Provide a hard-hitting, 2-3 sentence strategic verdict. 
+        Focus on the 'Why' and 'Next Step'. Use professional, high-impact consulting language.
         Output ONLY the text.
         """
         strategic_verdict = await gemini_client.generate(verdict_prompt, max_tokens=100)

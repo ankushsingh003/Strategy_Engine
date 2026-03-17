@@ -26,19 +26,25 @@ async def query_intelligence(payload: RAGQuery):
     logger.info(f"[RAG] Processing query: {payload.query} (Industry: {payload.industry})")
     
     prompt = f"""
-    Role: Senior Market Intelligence Strategist.
+    Role: Senior Market Intelligence Strategist at BCG/McKinsey.
     Context: You are performing a RAG-based deep dive into the '{payload.industry}' industry.
     
     Query: {payload.query}
     
-    Task: Use your expansive market knowledge (simulating RAG retrieval) to provide an authoritative, data-driven answer.
+    Task: Use your expansive market knowledge to provide an authoritative, data-driven answer.
     
-    Format requirements:
-    1. Direct answer with strategic depth.
-    2. Mention 2-3 specific 'Simulated Sources' (e.g., "SEC 10-K Filings", "Gartner Market Magic Quadrant", "Internal SWOT Analysis").
-    3. Provide a confidence score (0.0 to 1.0).
+    FORMATTING RULES:
+    1. Use clear, high-level headers (###) for sections.
+    2. Use double-newlines between all paragraphs for breathable white space.
+    3. Use bullet points ( - ) for listing trends, risks, or companies.
+    4. Bold key terms or metrics for visual emphasis.
+    5. Ensure the response looks premium, strategic, and professional.
     
-    Structure the response clearly.
+    Structure:
+    - Executive Summary (Brief paragraph)
+    - Key Strategic Insights (Bulleted list)
+    - Deep Dive Analysis (1-2 structured paragraphs)
+    - Source Attribution (List specific simulated sources)
     """
     
     try:

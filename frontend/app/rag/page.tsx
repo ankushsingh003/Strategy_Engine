@@ -15,6 +15,9 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
 interface Message {
   id: string;
   type: "user" | "bot";
@@ -191,13 +194,25 @@ export default function RAGPage() {
                     
                     <div className={`flex flex-col gap-2 max-w-[85%] ${ms.type === 'bot' ? '' : 'items-end'}`}>
                       <div className={`
-                        p-6 rounded-3xl whitespace-pre-wrap leading-relaxed border
+                        p-6 rounded-3xl leading-relaxed border prose prose-invert max-w-none
                         ${ms.type === 'bot' 
                           ? 'bg-slate-900/50 border-slate-800/80 text-slate-200' 
                           : 'bg-emerald-500 text-white border-emerald-600 font-medium'
                         }
                       `}>
-                        {ms.content}
+                        <ReactMarkdown 
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            p: ({children}) => <p className="mb-4 last:mb-0">{children}</p>,
+                            ul: ({children}) => <ul className="list-disc pl-5 mb-4 space-y-1">{children}</ul>,
+                            ol: ({children}) => <ol className="list-decimal pl-5 mb-4 space-y-1">{children}</ol>,
+                            h3: ({children}) => <h3 className="text-emerald-400 font-bold text-lg mt-6 mb-3 first:mt-0">{children}</h3>,
+                            strong: ({children}) => <strong className="text-white font-bold">{children}</strong>,
+                            li: ({children}) => <li className="text-slate-300">{children}</li>
+                          }}
+                        >
+                          {ms.content}
+                        </ReactMarkdown>
                       </div>
                       
                       {ms.type === 'bot' && ms.sources && (
