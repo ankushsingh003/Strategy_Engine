@@ -148,20 +148,5 @@ export default function AssistanceSection() {
       `}</style>
     </section>
   );
-}
-
-      <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #A1F28B;
-          border-radius: 10px;
-        }
-      `}</style>
-    </section>
   );
 }
