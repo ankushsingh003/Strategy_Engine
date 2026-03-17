@@ -119,7 +119,7 @@ export default function Home() {
             className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-emerald-400/30 to-transparent z-20 pointer-events-none"
           />
 
-          <div className="absolute inset-0 p-10 pt-16 pb-12 grid grid-cols-1 md:grid-cols-3 gap-8 items-center z-10">
+          <div className="absolute inset-0 p-10 grid grid-cols-1 md:grid-cols-3 gap-8 items-center z-10">
             {/* Left: Engine Identity & Metadata */}
             <div className="flex flex-col gap-6 text-left order-2 md:order-1">
               <div className="flex flex-col gap-1">
@@ -151,7 +151,7 @@ export default function Home() {
             </div>
 
             {/* Center: Neural Core Sphere */}
-            <div className="flex items-center justify-center order-1 md:order-2 translate-y-8">
+            <div className="flex items-center justify-center order-1 md:order-2">
               <div className="relative scale-110 md:scale-125">
                 {/* Outer Rotating Rings */}
                 <motion.div 
