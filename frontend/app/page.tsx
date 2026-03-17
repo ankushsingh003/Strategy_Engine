@@ -39,7 +39,7 @@ export default function Home() {
     { id: "aviation",     name: "Aviation & Aerospace",    icon: <Plane strokeWidth={2.5} className="w-8 h-8" />,            color: "text-[#143D2C] group-hover:text-white" },
     { id: "logistics",    name: "Logistics & Supply Chain",icon: <Truck strokeWidth={2.5} className="w-8 h-8" />,            color: "text-[#143D2C] group-hover:text-white" },
     { id: "agriculture",  name: "Agriculture & Food",      icon: <Leaf strokeWidth={2.5} className="w-8 h-8" />,             color: "text-[#143D2C] group-hover:text-white" },
-    { id: "media",        name: "Media & Entertainment",   icon: <Film strokeWidth={2.5} className="w-8 h-8" />,             color: "text-[#143D2C] group-hover:text-white" },
+    { id: "media",        name: "Media & Entertainment",   icon: <Film strokeWidth={2.5} className="w-8 h-8" />,             color: "text-[#143D2C] group-hover:text-white", image: "/images/industries/media_entertainment.png" },
     { id: "healthcare",   name: "Healthcare Services",     icon: <HeartPulse strokeWidth={2.5} className="w-8 h-8" />,       color: "text-[#143D2C] group-hover:text-white", image: "/images/industries/healthcare_tech.png" },
     { id: "insurance",    name: "Insurance & FinTech",     icon: <BadgeDollarSign strokeWidth={2.5} className="w-8 h-8" />,  color: "text-[#143D2C] group-hover:text-white", image: "/images/industries/fintech_strategy.png" },
   ];
