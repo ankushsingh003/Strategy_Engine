@@ -215,7 +215,7 @@ class IntelligenceService:
         current_time = time.time()
         if self._cache is not None and (current_time - self._cache_time < self._cache_ttl):
             logger.info("Serving Intelligence Report from Cache")
-            return self._cache
+            return self._cache  # type: ignore
 
         # Aggressively parallelized fetch + inference pipeline
         tasks = [
