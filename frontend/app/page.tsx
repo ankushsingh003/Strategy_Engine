@@ -179,12 +179,12 @@ export default function Home() {
             </div>
           </div>
           
-          {/* Floating Data Badge - Refined */}
+          {/* Floating Data Badge - Repositioned to avoid overlap */}
           <motion.div 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 1 }}
-            className="absolute bottom-12 left-12 bg-white/95 dark:bg-[#143D2C]/95 backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-2xl z-20"
+            className="absolute bottom-12 right-8 bg-white/95 dark:bg-[#143D2C]/95 backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-2xl z-30"
           >
             <div className="flex items-center gap-4">
                <div className="h-12 w-12 bg-[#A1F28B] rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(161,242,139,0.3)]">
