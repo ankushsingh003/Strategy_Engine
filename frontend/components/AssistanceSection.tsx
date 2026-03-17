@@ -123,10 +123,9 @@ export default function AssistanceSection() {
               initial={{ scale: 1.1, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               transition={{ duration: 1.2 }}
-              src="/assistance_ai.png"
+              src="/assistance_wave.png"
               alt="Assistance Visual"
-              className="w-full h-full object-cover grayscale-[0.2] brightness-90"
-              style={{ objectPosition: '0 20%' }}
+              className="w-full h-full object-cover"
             />
             {/* Smooth transition overlays - strengthened top mask to hide UI artifacts */}
             <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-transparent pointer-events-none" />
