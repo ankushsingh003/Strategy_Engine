@@ -1,81 +1,89 @@
-# ⚡ Vantage AI — Market Intelligence Engine
+# ⚡ Vantage AI — Strategic Intelligence Engine
 
 An enterprise-grade, AI-powered platform for generating real-time strategic consultancy reports, analyzing competitive landscapes, and surfacing predictive financial models across multiple industries.
 
-## 🚀 Features
+## 🚀 Overview
+Vantage AI transforms raw API signals from institutional sources (OpenFDA, FMP, CMS, HL7-FHIR) into board-ready strategic intelligence. Using a **Staggered Multi-Pillar Synthesis** architecture, the platform generates 7-dimensional strategic audits that bridge the gap between technical data and executive decision-making.
 
-- **Automated Consultancy Reports**: Generate comprehensive, board-ready strategic reports instantly for 15+ industries (Tech, Pharma, Oil & Gas, Finance, etc.).
-- **Live Contextual RAG**: Retrieves real-time data, filings, and macroeconomic metrics to feed into the Gemini 2.0 Flash generation pipeline.
-- **Predictive ML Ensembles**: Four-model ensemble architecture for forecasting market volatility, CAGR, and competitor trajectory.
-- **Dynamic PDF Rendering**: On-the-fly generation of stylized PDF dossiers containing data visualizations, markdown tables, and comprehensive analysis.
-- **Agentic Chat Interface**: Instantly surface industry "Intelligence Assets" by interacting with a natural-language AI consultant.
-- **Responsive Analytics Dashboard**: Built with Next.js, Framer Motion, and Tailwind CSS. Fully responsive layout ranging from mobile to ultra-wide displays.
+## 📊 System Working & Flowchart
+
+The system operates on an asynchronous "Fetch-and-Synthesize" pipeline. Data is retrieved in parallel, then passed through a staggered LLM synthesis stage to ensure high-density metrics without rate-limiting friction.
+
+```mermaid
+graph TD
+    subgraph "Data Acquisition Layer"
+        A[OpenFDA - Safety Signals] --> P[Pillar Fetcher]
+        B[FMP - Financial Data] --> P
+        C[CMS - Provider Metrics] --> P
+        D[HL7-FHIR - Tech Readiness] --> P
+    end
+
+    subgraph "Synthesis Intelligence Layer"
+        P --> E[Raw Signal Normalization]
+        E --> F{Staggered Groq Engine}
+        F --> G[Batch 1: Financial & Regulatory]
+        F --> H[Batch 2: Digital & Growth]
+        G & H --> I[Master Strategic Synthesis]
+    end
+
+    subgraph "Institutional UI Layer"
+        I --> J[Next.js 14 Dashboard]
+        J --> K[7-Pillar Strategic Report]
+        J --> L[Agentic Alpha Stream]
+    end
+
+    style F fill:#10b981,stroke:#333,stroke-width:4px
+    style J fill:#3b82f6,stroke:#333,stroke-width:2px
+```
+
+## 🧠 The 7-Pillar Strategic Framework
+Every intelligence audit is structured around seven institutional dimensions:
+1.  **Financial Advisory**: EBITDA optimization, capital reallocation, and margin acceleration.
+2.  **Regulatory Compliance**: Safety signal variance, HIPAA/FDA audit trails, and risk governance.
+3.  **Digital Transformation**: HL7-FHIR interoperability, EHR integration latency, and agentic automation.
+4.  **Strategic Growth**: M&A velocity, market-entry CAGR, and competitive consolidation.
+5.  **Operational Efficiency**: Labor-to-output ratios, ALOS optimization, and triage latency.
+6.  **Gap Analysis**: Delta identification between current talent/infra and institutional targets.
+7.  **Evolutionary Roadmap**: Tactical (P1), Strategic (P2), and Global (P3) optimization milestones.
 
 ## 🛠️ Tech Stack
 
-### Frontend
-- **Next.js 14** (App Router, Server Actions)
-- **React & TypeScript**
-- **Tailwind CSS** (Custom responsive bento-grids, glassmorphism UI)
-- **Framer Motion** (Micro-interactions and data visualization animations)
-- **Lucide React** (Vector iconography)
+### High-Performance Frontend
+- **Framework**: Next.js 14 (App Router)
+- **Styling**: Tailwind CSS with custom Glassmorphism tokens.
+- **Animations**: Framer Motion for micro-interactions and data-stream visualizations.
+- **Icons**: Lucide React.
 
-### Backend
-- **FastAPI** (Python 3.10+)
-- **Google Gemini 2.0 Flash SDK** (LLM inference)
-- **ReportLab & Markdown rendering pipelines** (PDF generation)
-- **Pandas & Scikit-learn** (Data processing and mock predictive ensembles)
+### Scalable Backend
+- **Framework**: FastAPI (Asynchronous Orchestration)
+- **Engine**: Groq (Llama-3.3-70B-Versatile) for sub-second intelligence synthesis.
+- **Data Protocols**: HL7-FHIR, RESTful Institutional APIs.
+- **Orchestration**: Staggered `asyncio` Task Groups.
 
 ## 🏁 Getting Started
 
 ### Prerequisites
 - Node.js (v18+)
 - Python (3.10+)
-- Google Gemini API Key
+- Groq API Key
+- OpenFDA & FMP API Keys
 
-### Backend Setup
-1. Navigate to the backend directory:
+### Installation
+1. **Clone & Install Backend**:
    ```bash
    cd backend
-   ```
-2. Create a virtual environment and install dependencies:
-   ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   source venv/bin/activate
    pip install -r requirements.txt
-   ```
-3. Create a `.env` file in the `backend/` directory:
-   ```env
-   GEMINI_API_KEY=your_api_key_here
-   ```
-4. Start the FastAPI server:
-   ```bash
-   uvicorn main:app --reload --port 8000
+   uvicorn main:app --reload
    ```
 
-### Frontend Setup
-1. Navigate to the frontend directory:
+2. **Clone & Install Frontend**:
    ```bash
    cd frontend
-   ```
-2. Install dependencies:
-   ```bash
    npm install
-   ```
-3. Create a `.env.local` file (optional if your backend runs on port 8000):
-   ```env
-   NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
-   ```
-4. Start the development server:
-   ```bash
    npm run dev
    ```
 
-## 📈 Recent Updates
-- Transitioned to the `gemini-2.0-flash` model for 4x faster intelligence synthesis.
-- Rebuilt frontend with robust, mobile-first responsive design principles.
-- Added instant zero-latency intelligence card surfacing in the chat interface.
-
 ---
-
-*Powered by Google Gemini · Built for the Future of Strategy*
+*Created with Alpha Integrity · Built for the Future of Strategy*
