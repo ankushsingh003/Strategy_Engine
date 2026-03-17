@@ -145,11 +145,11 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
               <Zap className="w-16 h-16 text-emerald-400" />
            </div>
-           <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-emerald-400 mb-4 flex items-center gap-2">
+           <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-emerald-400 mb-1 flex items-center gap-2">
              <div className="w-1 h-3 bg-emerald-500 rounded-full"></div>
              Master Strategic Synthesis
            </h3>
-           <p className="text-lg lg:text-xl font-medium leading-relaxed text-white/90 max-w-5xl whitespace-pre-line">
+           <p className="text-lg lg:text-xl font-medium leading-tight text-white/90 max-w-5xl whitespace-pre-line">
               {report?.master_inference || "Aggregating cross-pillar intelligence for global optimization..."}
            </p>
         </motion.div>
@@ -296,11 +296,11 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
                         </div>
                      </div>
 
-                     <div className="p-8 lg:p-10 flex flex-col justify-between h-full bg-black/20">
+                     <div className="p-4 lg:p-6 flex flex-col justify-between h-full bg-black/20">
                         <div>
-                         <div className="space-y-8">
+                         <div className="space-y-4">
                             <div>
-                               <div className="flex justify-between items-end mb-8">
+                               <div className="flex justify-between items-end mb-3">
                                  <div>
                                    <h4 className="text-[10px] uppercase tracking-widest text-white/40 mb-1">Market Sentiment</h4>
                                    <div className="flex items-center gap-2">
