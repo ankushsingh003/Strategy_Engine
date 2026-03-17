@@ -24,9 +24,9 @@ export default function AssistanceSection() {
   return (
     <section className="relative py-24 bg-[#0a0f1e] overflow-hidden">
       <div className="max-w-[1440px] mx-auto px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-stretch gap-0 rounded-[48px] overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.4)] border border-white/5">
+        <div className="flex flex-col lg:flex-row items-stretch gap-0 rounded-[48px] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.6)] bg-[#0a0f1e]">
           {/* Left Column: Interactive Selection Card */}
-          <div className="w-full lg:w-[45%] bg-white p-12 lg:p-24 flex flex-col justify-center">
+          <div className="w-full lg:w-[45%] bg-white p-12 lg:p-24 flex flex-col justify-center relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -117,21 +117,21 @@ export default function AssistanceSection() {
             </motion.div>
           </div>
 
-          {/* Right Column: Visual Component */}
-          <div className="w-full lg:w-[55%] relative bg-[#0a0f1e] overflow-hidden min-h-[400px]">
+          {/* Right Column: Visual Component - Added overlap to hide seam */}
+          <div className="w-full lg:w-[55%] relative bg-[#0a0f1e] overflow-hidden min-h-[400px] lg:-ml-px">
             <motion.img
               initial={{ scale: 1.1, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               transition={{ duration: 1.2 }}
               src="/assistance_wave.png"
               alt="Assistance Visual"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover relative z-0"
             />
-            {/* Smooth transition overlays - strengthened top mask to hide UI artifacts */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute inset-0 shadow-[inset_0_0_120px_rgba(10,15,30,0.4)] pointer-events-none" />
-            <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#0a0f1e] to-transparent opacity-90 pointer-events-none" />
-            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0a0f1e] to-transparent opacity-40 pointer-events-none" />
+            {/* Smooth transition overlays - removed light edge from white/10 */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0a0f1e]/40 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute inset-0 shadow-[inset_0_0_120px_rgba(10,15,30,0.5)] pointer-events-none" />
+            <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#0a0f1e] to-transparent opacity-95 pointer-events-none" />
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0a0f1e] to-transparent opacity-80 pointer-events-none" />
           </div>
         </div>
       </div>
