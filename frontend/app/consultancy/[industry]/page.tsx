@@ -274,6 +274,19 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
                               </div>
                            </div>
 
+                           {/* 3. Mechanics - Moved back to Left Column */}
+                           <div>
+                              <h4 className="text-[10px] uppercase tracking-[0.4em] text-white/30 mb-6">Operational Mechanics</h4>
+                              <div className="space-y-4">
+                                 {panels[activePanel].data?.inference?.mechanics?.map((mech, i) => (
+                                    <div key={i} className="p-4 bg-white/5 rounded-2xl border border-white/5 flex items-center justify-between group/mech">
+                                       <span className="text-sm text-white/60">{mech}</span>
+                                       <div className="w-2 h-2 rounded-full bg-white/10 group-hover/mech:bg-emerald-500 transition-colors"></div>
+                                    </div>
+                                 ))}
+                              </div>
+                           </div>
+
                            <div className="pt-8 border-t border-white/5 opacity-50">
                               <h4 className="text-[9px] uppercase tracking-widest text-white/40 mb-4">Signal Breakdown</h4>
                               <p className="text-xs font-mono leading-relaxed">
@@ -322,19 +335,6 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
                                            {i + 1}
                                         </div>
                                         <p className="text-sm font-bold text-white/90 leading-tight">{step}</p>
-                                     </div>
-                                  ))}
-                               </div>
-                            </div>
-
-                            {/* 3. Mechanics - Shifted Here */}
-                            <div>
-                               <h4 className="text-[10px] uppercase tracking-[0.4em] text-white/30 mb-6">Operational Mechanics</h4>
-                               <div className="space-y-4">
-                                  {panels[activePanel].data?.inference?.mechanics?.map((mech, i) => (
-                                     <div key={i} className="p-4 bg-white/5 rounded-2xl border border-white/5 flex items-center justify-between group/mech">
-                                        <span className="text-sm text-white/60">{mech}</span>
-                                        <div className="w-2 h-2 rounded-full bg-white/10 group-hover/mech:bg-emerald-500 transition-colors"></div>
                                      </div>
                                   ))}
                                </div>
