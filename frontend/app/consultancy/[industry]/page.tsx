@@ -21,30 +21,22 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
   const [analysisData, setAnalysisData] = useState<any>(null);
 
   useEffect(() => {
-    const fetchSignals = async () => {
-      try {
-        const type = capability?.toLowerCase().includes('digital') ? 'clinical' : 'operational';
-        const response = await fetch(`http://localhost:8000/api/intelligence/live-signals?type=${type}`);
-        const data = await response.json();
-        
-        setAnalysisData({
-          industry: params.industry,
-          capability: capability,
-          signals: data.signals || [
-            "Network Signal: Regional hospital expansion detected.",
-            "Market Movement: Increase in facility-to-physician affiliations.",
-            "Technology Pulse: Legacy system migration to FHIR underway."
-          ],
-          inference: "Based on real-time data from HAPI FHIR and CMS, the convergence of " + capability + " in " + params.industry + " represents a 42% growth opportunity. Enterprises must prioritize data interoperability to capture the emerging value chain."
-        });
-      } catch (error) {
-        console.error("Error fetching signals:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    // Simulate real-time data fetching and LLM inference
+    const timer = setTimeout(() => {
+      setAnalysisData({
+        industry: params.industry,
+        capability: capability,
+        signals: [
+          "Recent market volatility in " + params.industry + " sector.",
+          "High correlation between " + capability + " and operational margins.",
+          "Competitor A recently integrated RAG-based diagnostics."
+        ],
+        inference: "The convergence of AI-driven diagnostics and " + capability + " and " + params.industry + " represents a 42% growth opportunity. Enterprises should prioritize vector-engine integration for real-time strategic pivot capabilities."
+      });
+      setLoading(false);
+    }, 3000);
 
-    fetchSignals();
+    return () => clearTimeout(timer);
   }, [params.industry, capability]);
 
   if (loading) {

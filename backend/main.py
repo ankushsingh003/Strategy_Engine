@@ -32,26 +32,6 @@ app.include_router(market.router, prefix="/api", tags=["Market Intelligence"])
 app.include_router(rag.router, prefix="/api/rag", tags=["Knowledge RAG"])
 app.include_router(ws_signals.router, tags=["Streams"])  # WS routes don't use /api prefix
 
-from backend.services.market_engine.cms_service import cms_service
-from backend.services.market_engine.fhir_service import fhir_service
-
-@app.get("/api/intelligence/live-signals")
-async def get_live_intelligence_signals(type: str = "general"):
-    """
-    Aggregates live signals from CMS and HAPI FHIR servers.
-    """
-    if type == "clinical":
-        signals = await fhir_service.get_clinical_signals()
-    elif type == "operational":
-        signals = await cms_service.get_live_signals()
-    else:
-        # Mix of both
-        cms_sigs = await cms_service.get_live_signals()
-        fhir_sigs = await fhir_service.get_clinical_signals()
-        signals = (cms_sigs[:2] + fhir_sigs[:2])
-    
-    return {"signals": signals}
-
 @app.get("/")
 def read_root():
     return {"status": "Market Intelligence API is running"}
