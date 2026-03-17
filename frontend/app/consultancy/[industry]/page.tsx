@@ -222,7 +222,7 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
                          </div>
                          <div className="pt-2 border-t border-white/5">
                             <span className="text-[9px] text-emerald-500/40 uppercase block mb-1">Regulatory & Compliance Status</span>
-                            <p className="text-sm font-black italic color-emerald-400">{report?.operational?.specialized?.current_state?.regulatory_status}</p>
+                            <p className="text-sm font-black italic text-emerald-400">{report?.operational?.specialized?.current_state?.regulatory_status}</p>
                          </div>
                       </div>
                    </div>
