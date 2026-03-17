@@ -230,10 +230,10 @@ export default function Home() {
                   Global Sectors
                 </motion.div>
                 <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-[#143D2C] dark:text-white leading-[0.9]">
-                  INDUSTRIES WE <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-600 dark:from-slate-500 dark:to-white">TRANSFORM.</span>
+                  FUTURE-PROOF <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-emerald-700 dark:from-emerald-400 dark:to-white">CONSULTANCY.</span>
                 </h2>
               </div>
-              <p className="text-slate-500 font-medium max-w-sm">Select a sector to deploy our proprietary ML diagnostics and strategic RAG context.</p>
+              <p className="text-slate-500 font-medium max-w-sm">Forge a legacy of strategic security. Choose our proprietary ML diagnostics for high-conviction, future-ready growth.</p>
           </div>
 
           <motion.div
