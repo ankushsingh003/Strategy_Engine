@@ -105,100 +105,117 @@ export default function Home() {
           </motion.div>
         </div>
 
-        {/* Refined Hero Visual Column - Neural Intelligence Console */}
+        {/* Premium Hero Visual Column - Neural Intelligence Console Redesign */}
         <motion.div 
-          initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
-          animate={{ opacity: 1, scale: 1, rotate: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative h-[400px] lg:h-[550px] w-full bg-slate-100 dark:bg-slate-900 rounded-[40px] overflow-hidden group shadow-2xl border border-white/10"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="relative h-[450px] lg:h-[600px] w-full bg-[#020617] rounded-[32px] overflow-hidden border border-emerald-500/20 shadow-[0_0_50px_rgba(16,185,129,0.1)] group"
         >
-          {/* Background Technical Grid */}
-          <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.07] pointer-events-none" 
-               style={{ backgroundImage: `radial-gradient(#A1F28B 1px, transparent 1px)`, backgroundSize: '32px 32px' }} />
-          
-          <div className="absolute inset-0 flex items-center justify-center p-8 sm:p-12">
-            <div className="w-full h-full bg-[#143D2C]/5 dark:bg-white/5 rounded-[40px] border border-white/10 flex flex-col items-center justify-center relative overflow-hidden">
-               
-               {/* Neural Intelligence Pulse */}
-               <div className="relative z-10 flex flex-col items-center animate-float">
-                  <div className="relative">
-                    <motion.div 
-                       animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.3, 0.1] }}
-                       transition={{ repeat: Infinity, duration: 3 }}
-                       className="absolute inset-[-30px] bg-[#A1F28B] rounded-full blur-2xl" 
-                    />
-                    <div className="h-24 w-24 bg-[#A1F28B] rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(161,242,139,0.4)] relative border-[3px] border-white/20">
-                       <Zap className="w-12 h-12 text-[#143D2C]" />
+          {/* Scanning Beam Animation */}
+          <motion.div 
+            animate={{ top: ["0%", "100%", "0%"] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+            className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent z-20 pointer-events-none"
+          />
+
+          <div className="absolute inset-0 p-8 flex flex-col justify-between relative z-10">
+            {/* Top Metadata Header */}
+            <div className="flex justify-between items-start">
+              <div className="flex flex-col gap-1">
+                <span className="text-[10px] font-black text-emerald-500/60 uppercase tracking-[0.3em]">Global Strategy Unit</span>
+                <h3 className="text-3xl font-black text-white tracking-tighter leading-none">
+                  NEURAL <br /> INTELLIGENCE <br /> ENGINE
+                </h3>
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[9px] font-bold text-emerald-500/80 uppercase tracking-widest">Core Consult Unit Active</span>
+                </div>
+              </div>
+
+              <div className="text-right font-mono text-[8px] text-emerald-500/40 flex flex-col gap-1">
+                <div className="flex justify-between gap-4"><span>SYS_ARCH:</span> <span>VECTOR_RAG_V2</span></div>
+                <div className="flex justify-between gap-4"><span>LATENCY:</span> <span>42ms</span></div>
+                <div className="flex justify-between gap-4"><span>THROUGHPUT:</span> <span>1.2M/s</span></div>
+                <div className="mt-2 text-emerald-500/60">
+                  <span>CLUSTER: SLC_FILINGS_DB</span> <br />
+                  <span>SYNC: 100%</span> <br />
+                  <span>TRACING: LANGFUSE_ENABLED</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Central Neural Sphere Visual */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="relative">
+                {/* Outer Rotating Rings */}
+                <motion.div 
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-[-60px] border border-emerald-500/10 rounded-full"
+                />
+                <motion.div 
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-[-40px] border border-emerald-500/20 rounded-full border-dashed"
+                />
+                
+                {/* Inner Glowing Core */}
+                <div className="relative w-40 h-40 flex items-center justify-center">
+                  <motion.div 
+                    animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
+                    transition={{ duration: 4, repeat: Infinity }}
+                    className="absolute inset-0 bg-emerald-500/20 rounded-full blur-3xl"
+                  />
+                  <div className="w-32 h-32 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full p-0.5 shadow-[0_0_40px_rgba(52,211,153,0.4)]">
+                    <div className="w-full h-full bg-[#020617] rounded-full flex items-center justify-center overflow-hidden relative">
+                      <div className="absolute inset-0 opacity-20" 
+                           style={{ backgroundImage: `radial-gradient(#10b981 1px, transparent 1px)`, backgroundSize: '8px 8px' }} />
+                      <Zap className="w-16 h-16 text-emerald-400 relative z-10" />
                     </div>
                   </div>
-                  <div className="mt-6 text-center">
-                    <div className="text-lg font-black text-[#143D2C] dark:text-white tracking-widest uppercase mb-1">Neural Engine</div>
-                    <div className="text-[9px] font-bold text-[#A1F28B] uppercase tracking-[0.4em] animate-pulse">Core Unit Active</div>
-                  </div>
-               </div>
+                </div>
+              </div>
+            </div>
 
-               {/* Simulated Data Stream Overlays */}
-               <div className="absolute top-12 left-12 right-12 flex justify-between opacity-40 font-mono text-[9px] dark:text-[#A1F28B] text-[#143D2C]">
-                  <div className="flex flex-col gap-1">
-                    <span>SYS_ARCH: VECTOR_RAG_V2</span>
-                    <span>LATENCY: 42ms</span>
-                    <span>THROUGHPUT: 1.2M/s</span>
-                  </div>
-                  <div className="text-right flex flex-col gap-1">
-                    <span>CLUSTER: SEC_FILINGS_DB</span>
-                    <span>SYNC: 100%</span>
-                    <span>TRACING: LANGFUSE_ENABLED</span>
-                  </div>
-               </div>
+            {/* Bottom Section: Logs and Metrics */}
+            <div className="flex items-end justify-between gap-6">
+              {/* Dynamic Log Feed */}
+              <div className="flex-1 bg-black/40 backdrop-blur-md rounded-xl p-4 border border-emerald-500/10 font-mono text-[9px] h-24 overflow-hidden relative">
+                <motion.div 
+                  animate={{ y: [-100, 0] }}
+                  transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                  className="flex flex-col gap-1.5"
+                >
+                  <span className="text-amber-500/80">[WARN] High volatility detected,</span>
+                  <span className="text-emerald-500/80">[INFO] Generating strategy paths,</span>
+                  <span className="text-emerald-400 font-bold">[SUCCESS] Strategic roadmap ready for review</span>
+                  <span className="text-slate-500">[DATA] Ingesting real-time market signals...</span>
+                  <span className="text-blue-400">[RAG] Vector similarity search complete.</span>
+                  <span className="text-emerald-500/80">[INFO] Synthesizing Q4 SEC filings...</span>
+                </motion.div>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent pointer-events-none" />
+              </div>
 
-               {/* Central Knowledge Graph Skeleton (SVG) */}
-               <svg className="absolute inset-0 w-full h-full opacity-10 dark:opacity-20 pointer-events-none p-12" viewBox="0 0 400 400">
-                  <circle cx="200" cy="200" r="100" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="5 5" />
-                  <circle cx="200" cy="200" r="150" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="10 10" />
-                  <line x1="100" y1="100" x2="300" y2="300" stroke="currentColor" strokeWidth="0.5" />
-                  <line x1="300" y1="100" x2="100" y2="300" stroke="currentColor" strokeWidth="0.5" />
-                  <circle cx="100" cy="100" r="3" fill="#A1F28B" />
-                  <circle cx="300" cy="300" r="3" fill="#A1F28B" />
-                  <circle cx="300" cy="100" r="3" fill="#A1F28B" />
-                  <circle cx="100" cy="300" r="3" fill="#A1F28B" />
-               </svg>
-
-               {/* Bottom Data Stream Snippet */}
-               <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-[80%] bg-black/40 backdrop-blur-md rounded-xl p-3 border border-white/5 font-mono text-[8px] text-slate-400 overflow-hidden h-12">
-                  <motion.div 
-                    animate={{ y: [-100, 0] }}
-                    transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
-                    className="flex flex-col gap-1"
-                  >
-                    <span className="text-[#A1F28B]">[INFO] Synthesizing Q4 SEC filings for Banking sector...</span>
-                    <span>[DATA] Ingesting real-time market signals via Kafka...</span>
-                    <span className="text-blue-400">[RAG] Vector similarity search complete. Precision: 0.98</span>
-                    <span>[ML] Running 4-model ensemble prediction...</span>
-                    <span className="text-amber-400">[WARN] High volatility detected in Energy signals.</span>
-                    <span>[INFO] Generating strategic consultancy report...</span>
-                    <span className="text-[#A1F28B]">[SUCCESS] Output ready for client review.</span>
-                  </motion.div>
-               </div>
+              {/* Accuracy & Insights Card */}
+              <div className="w-1/2 bg-white/5 backdrop-blur-xl rounded-2xl p-5 border border-white/10 flex flex-col gap-3 shadow-2xl">
+                 <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                    <div className="flex flex-col">
+                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Strategy Accuracy:</span>
+                       <span className="text-3xl font-black text-white">98.2%</span>
+                    </div>
+                 </div>
+                 <div className="flex justify-between items-center">
+                    <div className="flex flex-col">
+                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Roadside Insights:</span>
+                       <span className="text-2xl font-black text-white tabular-nums">3.1M</span>
+                    </div>
+                    <TrendingUp className="w-6 h-6 text-emerald-400" />
+                 </div>
+                 <div className="text-[9px] text-center text-emerald-500/60 font-bold uppercase tracking-[0.2em] mt-1 italic">xprilion consultancy</div>
+              </div>
             </div>
           </div>
-          
-          {/* Floating Data Badge - Repositioned to avoid overlap */}
-          <motion.div 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 1 }}
-            className="absolute bottom-12 right-8 bg-white/95 dark:bg-[#143D2C]/95 backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-2xl z-30"
-          >
-            <div className="flex items-center gap-4">
-               <div className="h-12 w-12 bg-[#A1F28B] rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(161,242,139,0.3)]">
-                  <Activity className="w-6 h-6 text-[#143D2C]" />
-               </div>
-               <div>
-                  <div className="text-[10px] font-black text-slate-400 dark:text-white/40 uppercase tracking-[0.2em] mb-0.5">Live Intelligence</div>
-                  <div className="text-2xl font-black text-[#143D2C] dark:text-white tabular-nums">12.8M <span className="text-xs text-[#A1F28B] ml-1">+24.5%</span></div>
-               </div>
-            </div>
-          </motion.div>
         </motion.div>
       </section>
 
