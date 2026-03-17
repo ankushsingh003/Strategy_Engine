@@ -109,31 +109,40 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
   }
 
   const panels = [
-    { title: "Financial Advisory", icon: <TrendingUp />, data: report?.financial, color: "from-blue-600/20 to-transparent", stroke: "#3b82f6", border: "border-blue-500/30", src: "CMS-PROVIDER" },
-    { title: "Regulatory Compliance", icon: <ShieldCheck />, data: report?.regulatory, color: "from-amber-600/20 to-transparent", stroke: "#f59e0b", border: "border-amber-500/30", src: "OPEN_FDA" },
-    { title: "Digital Transformation", icon: <Database />, data: report?.digital, color: "from-emerald-600/20 to-transparent", stroke: "#10b981", border: "border-emerald-500/30", src: "HL7-FHIR" },
-    { title: "Strategic Growth", icon: <TrendingUp />, data: report?.growth, color: "from-purple-600/20 to-transparent", stroke: "#a855f7", border: "border-purple-500/30", src: "FMP-LIVE" },
-    { title: "Operational Efficiency", icon: <Settings />, data: report?.operational, color: "from-cyan-600/20 to-transparent", stroke: "#06b6d4", border: "border-cyan-500/30", src: "ENGINE-CORE" }
+    { title: "Financial Advisory", icon: <TrendingUp />, data: report?.financial, color: "from-blue-600/20 to-transparent", stroke: "#3b82f6", border: "border-blue-500/30", src: "CMS-PROVIDER", focus: "Financial Advisory" },
+    { title: "Regulatory Compliance", icon: <ShieldCheck />, data: report?.regulatory, color: "from-amber-600/20 to-transparent", stroke: "#f59e0b", border: "border-amber-500/30", src: "OPEN_FDA", focus: "Regulatory Compliance & Risk Management" },
+    { title: "Digital Transformation", icon: <Database />, data: report?.digital, color: "from-emerald-600/20 to-transparent", stroke: "#10b981", border: "border-emerald-500/30", src: "HL7-FHIR", focus: "Digital Transformation & Health Tech" },
+    { title: "Strategic Growth", icon: <TrendingUp />, data: report?.growth, color: "from-purple-600/20 to-transparent", stroke: "#a855f7", border: "border-purple-500/30", src: "FMP-LIVE", focus: "Strategic Growth & Market Entry" },
+    { title: "Operational Efficiency", icon: <Settings />, data: report?.operational, color: "from-cyan-600/20 to-transparent", stroke: "#06b6d4", border: "border-cyan-500/30", src: "ENGINE-CORE", focus: "Operational Efficiency & Optimization" }
   ];
+
+  const focusedPanelIdx = panels.findIndex(p => p.focus === capability);
 
   return (
     <main className="min-h-screen bg-[#020617] text-white p-4 lg:p-6 overflow-x-hidden relative">
       <div className="max-w-7xl mx-auto">
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-3 mb-4 border-b border-white/5 pb-4 relative">
             <div className="absolute top-0 right-0 opacity-10 blur-3xl w-64 h-64 bg-emerald-500 rounded-full -mr-32 -mt-32"></div>
-          <div>
-            <div className="flex items-center gap-2 text-emerald-400 text-xs font-black uppercase tracking-[0.4em] mb-2">
+          <div className="flex-1">
+            <div className="flex items-center gap-2 text-emerald-400 text-[10px] font-black uppercase tracking-[0.4em] mb-1">
               <Activity className="w-4 h-4" /> Live Intelligence Dashboard
             </div>
             <h1 className="text-3xl lg:text-4xl font-black tracking-tighter leading-none">
               STRATEGIC <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-white italic uppercase">{params.industry.replace('-',' ')} CORE.</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-white italic uppercase">{params.industry.replace('-',' ')} Intelligence.</span>
             </h1>
           </div>
-          <div className="bg-white/5 backdrop-blur-3xl rounded-xl p-3 border border-white/10 max-w-sm">
-             <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest block mb-0.5">Primary Selection</span>
-             <p className="text-sm font-bold text-white leading-tight">{capability}</p>
-          </div>
+          {capability && capability !== "Capabilities" && (
+            <div className="bg-emerald-500/10 backdrop-blur-3xl rounded-2xl p-4 border border-emerald-500/20 max-w-sm flex items-start gap-4">
+               <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/20">
+                  <Zap className="text-[#020617] w-5 h-5" />
+               </div>
+               <div>
+                  <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest block mb-1">Primary Strategic Focus</span>
+                  <p className="text-base font-black text-white leading-tight italic tracking-tight">{capability}</p>
+               </div>
+            </div>
+          )}
         </header>
 
         {/* Master Synthesis Banner */}
@@ -160,11 +169,20 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
             <motion.div 
               key={idx}
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={{ 
+                opacity: 1, 
+                y: 0,
+                scale: panel.focus === capability ? 1.02 : 1
+              }}
               transition={{ delay: idx * 0.1 }}
               onClick={() => setActivePanel(idx)}
-              className={`md:col-span-3 md:row-span-1 bg-gradient-to-br ${panel.color} rounded-[24px] p-5 border ${panel.border} relative overflow-hidden group cursor-pointer hover:border-white/20 transition-all`}
+              className={`md:col-span-3 md:row-span-1 bg-gradient-to-br ${panel.color} rounded-[24px] p-5 border ${panel.focus === capability ? 'border-emerald-500/60 shadow-[0_0_40px_rgba(16,185,129,0.1)]' : panel.border} relative overflow-hidden group cursor-pointer hover:border-emerald-400/50 transition-all`}
             >
+               {panel.focus === capability && (
+                 <div className="absolute top-0 right-0 bg-emerald-500 text-[#020617] text-[8px] font-black uppercase tracking-widest py-1 px-3 rounded-bl-xl z-20 animate-pulse">
+                   High Priority Focus
+                 </div>
+               )}
                <div className="relative z-10 h-full flex flex-col">
                   <div className="flex justify-between items-start mb-6">
                     <div className="flex items-center gap-4">
@@ -196,11 +214,20 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
         {/* Panel 5: Operational Efficiency */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={{ 
+            opacity: 1, 
+            y: 0,
+            scale: panels[4].focus === capability ? 1.02 : 1
+          }}
           transition={{ delay: 0.4 }}
           onClick={() => setActivePanel(4)}
-          className={`bg-gradient-to-r ${panels[4].color} rounded-[24px] p-5 border ${panels[4].border} relative overflow-hidden cursor-pointer group hover:border-white/20 transition-all`}
+          className={`bg-gradient-to-r ${panels[4].color} rounded-[24px] p-5 border ${panels[4].focus === capability ? 'border-emerald-500/60 shadow-[0_0_40px_rgba(16,185,129,0.1)]' : panels[4].border} relative overflow-hidden cursor-pointer group hover:border-emerald-400/50 transition-all`}
         >
+           {panels[4].focus === capability && (
+             <div className="absolute top-0 right-0 bg-emerald-500 text-[#020617] text-[8px] font-black uppercase tracking-widest py-1 px-3 rounded-bl-xl z-20 animate-pulse">
+               High Priority Focus
+             </div>
+           )}
            <div className="flex flex-col md:flex-row items-center gap-2 relative z-10">
               <div className="w-12 h-12 bg-cyan-500 rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-cyan-500/20">
                  {React.cloneElement(panels[4].icon as React.ReactElement, { className: "text-white w-6 h-6" })}
