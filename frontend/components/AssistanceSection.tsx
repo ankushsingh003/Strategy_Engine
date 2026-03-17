@@ -123,7 +123,7 @@ export default function AssistanceSection() {
               initial={{ scale: 1.1, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               transition={{ duration: 1.2 }}
-              src="/assistance_wave.png"
+              src="/assistance_emerald.png"
               alt="Assistance Visual"
               className="w-full h-full object-cover relative z-0"
             />
