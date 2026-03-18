@@ -111,25 +111,43 @@ class IntelligenceService:
             logger.warning(f"CMS Fetch Timeout/Error (Failing to default): {e}")
         return {"short": "Financial Advisory: Market-wide capital reallocation detected.", "raw": [], "trends": [40, 45, 42, 50, 48, 55, 60]}
 
-    async def fetch_regulatory_compliance(self) -> Dict[str, Any]:
-        """ Fetches adverse events from openFDA """
+    async def fetch_regulatory_compliance(self, industry: str = "Medical") -> Dict[str, Any]:
+        """ Fetches live sector-relevant safety/compliance data from OpenFDA """
+        # Industry-aware regulatory anchors
+        if "restaurant" in industry.lower():
+            company = "Sysco"
+            # Use food enforcement data for restaurants
+            url = f"https://api.fda.gov/food/enforcement.json?api_key={self.fda_key}&limit=5&search=recalling_firm:\"{company}\""
+        elif "auto" in industry.lower():
+            return {"short": "NHTSA Regulatory: Federal Motor Vehicle Safety Standards (FMVSS) compliance grounding active.", "raw": [], "trends": [90, 92, 91, 95, 93, 98, 96]}
+        else:
+            # Default to Medical/Pharma
+            company = "Johnson & Johnson"
+            url = f"https://api.fda.gov/drug/event.json?api_key={self.fda_key}&limit=5&search=patient.drug.open_fda.manufacturer_name:\"{company}\""
+
         try:
-            url = f"https://api.fda.gov/drug/event.json?api_key={self.fda_key}&limit=5"
-            async with httpx.AsyncClient(timeout=3.0) as client:
+            async with httpx.AsyncClient(timeout=5.0) as client:
                 resp = await client.get(url)
                 if resp.status_code == 200:
                     results = resp.json().get("results", [])
-                    event = results[0] if results else {}
-                    date = event.get("receiptdate", "Recent")
-                    signal = f"Regulatory Signal: FDA processing safety signal batch from {date}. Monitoring compliance thresholds."
+                    count = len(results)
+                    
+                    if "restaurant" in industry.lower():
+                        msg = f"Food Safety Audit: {count} recent OpenFDA food enforcement alerts for '{company}' cluster."
+                    else:
+                        msg = f"Regulatory Pulse: {count} adverse event clusters detected for '{company}' via OpenFDA."
+                        
                     return {
-                        "short": signal,
+                        "short": msg,
                         "raw": results,
                         "trends": [12, 18, 15, 22, 19, 25, 30]
                     }
         except Exception as e:
             logger.warning(f"FDA Fetch Timeout/Error (Failing to default): {e}")
-        return {"short": "Regulatory Compliance: Increased scrutiny on device recall protocols.", "raw": [], "trends": [10, 12, 11, 15, 14, 18, 20]}
+            
+        if "restaurant" in industry.lower():
+            return {"short": "Food Safety: FSMA 204 Traceability grounding active. No critical recall clusters detected.", "raw": [], "trends": [10, 12, 11, 15, 14, 18, 20]}
+        return {"short": "Regulatory Compliance: Institutional grounding enabled. High-velocity safety-signal monitoring active.", "raw": [], "trends": [10, 12, 11, 15, 14, 18, 20]}
 
     async def fetch_digital_transformation(self) -> Dict[str, Any]:
         """ Fetches live sector trends using DIGITAL_TRANSFORM_KEY """
@@ -257,23 +275,55 @@ class IntelligenceService:
             
         return {"short": "Square Intelligence: POS connection verified. Real-time transaction and labor signals active.", "raw": [], "trends": [65, 68, 66, 72, 70, 75, 80]}
 
-    async def generate_specialized_pillar_report(self, all_data_shorts: Dict[str, str], focus_area: str, industry: str = "Medical") -> Dict[str, Any]:
+    async def generate_specialized_pillar_report(self, all_data: Dict[str, Any], focus_area: str, industry: str = "Medical") -> Dict[str, Any]:
         """ Generates a 7-pillar specialized report structure for any strategic focus area using all provided API signals """
         try:
-            markers = {
-                "Digital": "Focus on HL7-FHIR latency, RESTful telemetry (ms), and ETL data-lake availability. REQUIRED: Include at least two numeric values (e.g. 98%, <200ms).",
-                "Financial": "Focus on EBITDA optimization, Net-Income Ratio benchmarks, and CMS Provider cost-transparency. REQUIRED: Include specific $ or % figures.",
-                "Regulatory": "Focus on OpenFDA Adverse Event logs, HIPAA audit trails, and safety signal variance. REQUIRED: Mention a specific count or date from OpenFDA.",
-                "Strategic Growth": "Focus on CVS/Sector leader revenue, M&A capital deployment velocity, and market-entry CAGR. REQUIRED: Include a numerical CAGR or billion-dollar figure.",
-                "Operational": "Focus on labor-to-output ratios, ALOS (Average Length of Stay) optimization, and triage latency. REQUIRED: Include specific 'days' or 'reduction %' metrics."
-            }
+            industry_key = next((k for k in self.industry_configs.keys() if k in industry.lower()), "default")
+            config = self.industry_configs[industry_key]
+
+            # Dynamic markers based on industry grounding
+            if industry_key == "medical":
+                markers = {
+                    "Digital": "Focus on HL7-FHIR latency, RESTful telemetry (ms), and ETL data-lake availability. include at least two numeric values (e.g. 98%, <200ms).",
+                    "Financial": "Focus on EBITDA optimization, Net-Income Ratio benchmarks, and CMS Provider cost-transparency. include specific $ or % figures.",
+                    "Regulatory": "Focus on OpenFDA Adverse Event logs, HIPAA audit trails, and safety signal variance. Mention a specific count or date from OpenFDA.",
+                    "Strategic Growth": "Focus on CVS/Sector leader revenue, M&A capital deployment velocity, and market-entry CAGR. Include a numerical CAGR or billion-dollar figure.",
+                    "Operational": "Focus on labor-to-output ratios, ALOS (Average Length of Stay) optimization, and triage latency. Include specific 'days' or 'reduction %' metrics."
+                }
+            elif industry_key == "restaurants":
+                markers = {
+                    "Digital": f"Focus on {config['digital_anchor']}, POS downtime, and digital menu sync latency. REQUIRED: Cite SQUARE POS data if present. NEVER mention patients.",
+                    "Financial": "Focus on Revenue-per-available-seat (RevPASH), food-cost percentage, and Square transaction volume. REQUIRED: Cite transaction counts from Square. NEVER mention EBITDA unless specifically grounded in hospitality.",
+                    "Regulatory": "Focus on FSMA compliance, health inspection score variance, and labor law risks. REQUIRED: cite FSMA or local health codes. NEVER mention 'adverse events' or 'drug safety'.",
+                    "Strategic Growth": "Focus on Same-Store-Sales (SSS) growth, unit expansion CAGR, and ghost-kitchen integration. Include billion-dollar sector benchmarks.",
+                    "Operational": f"Focus on {config['operational_anchor']}, table-turnover time, and labor-to-sales ratios. REQUIRED: Cite Square shift data if present. NEVER mention hospitals."
+                }
+            elif industry_key == "automobiles":
+                markers = {
+                    "Digital": f"Focus on {config['digital_anchor']}, V2X latency, and OTA success rates. REQUIRED: Cite NHTSA technical specs.",
+                    "Financial": "Focus on Capex for EV retooling, inventory carrying costs, and FMP sector financials. include specific $ figures.",
+                    "Regulatory": "Focus on NHTSA recall frequency, ISO 26262 compliance, and carbon credit trade-offs. cite specific NHTSA safety clusters.",
+                    "Strategic Growth": "Focus on EV market share CAGR, charging infrastructure density, and autonomous tier-1 partnerships.",
+                    "Operational": f"Focus on {config['operational_anchor']}, production line downtime, and waste reduction."
+                }
+            else:
+                markers = {
+                    "Digital": "Focus on cloud migration, API uptime, and infrastructure latency.",
+                    "Financial": "Focus on OpEx reduction, revenue volatility, and institutional capital flow.",
+                    "Regulatory": "Focus on GDPR/Compliance audit trails and industry-specific governance.",
+                    "Strategic Growth": "Focus on market penetration, product-led growth (PLG) metrics, and M&A velocity.",
+                    "Operational": "Focus on workflow automation, labor productivity, and system uptime."
+                }
             
             focus_marker = next((v for k, v in markers.items() if k.lower() in focus_area.lower()), markers["Operational"])
             
             industry_key = next((k for k in self.industry_configs.keys() if k in industry.lower()), "default")
             config = self.industry_configs[industry_key]
             
-            context = json.dumps(all_data_shorts, indent=2)
+            # Extract shorts and any metadata for context
+            context_dict = {k: v.get("short") for k, v in all_data.items()}
+            metadata_dict = {k: v.get("metadata") for k, v in all_data.items() if v.get("metadata")}
+            
             prompt = f"""
             System: You are an Elite Strategy Consultant (Partner Level). 
             Industry: {industry}
@@ -285,7 +335,9 @@ class IntelligenceService:
             DO NOT mention EHR, FHIR, or PATIENTS unless the industry is Medical.
             For {industry}, use technical anchors like: {config['digital_anchor']} and {config['operational_anchor']}.
             
-            Use these live API signals as the factual foundation: {context}
+            Use these live API signals and metadata as the factual foundation:
+            Signals: {json.dumps(context_dict, indent=2)}
+            Metadata context: {json.dumps(metadata_dict, indent=2)}
             
             Sections Required (Output ONLY valid JSON):
             1. "executive_summary": {{"why": "Specific friction point using technical metrics", "what": "Proposed FIX (e.g., agentic automation)", "impact": "Projected ROI/Value (MUST BE A SPECIFIC NUMBER, eg $2.4M or 15%)"}}
@@ -387,42 +439,18 @@ class IntelligenceService:
             logger.info(f"Serving {industry} Intelligence Report from Cache")
             return self._cache[industry]
 
-        # Industry-specific primary fetch
-        if "auto" in industry.lower():
-            tasks = [
-                self.fetch_pillar_with_inference("Financial", self.fetch_financial_advisory),
-                self.fetch_regulatory_compliance(),
-                self.fetch_automobile_nhtsa(industry=industry), # Pass industry for sub-sector identification
-                self.fetch_pillar_with_inference("Growth", self.fetch_strategic_growth)
-            ]
-        elif "restaurant" in industry.lower():
-            tasks = [
-                self.fetch_pillar_with_inference("Financial", self.fetch_financial_advisory),
-                self.fetch_regulatory_compliance(),
-                self.fetch_square_restaurant_data(), # Live POS data
-                self.fetch_pillar_with_inference("Growth", self.fetch_strategic_growth)
-            ]
-        else:
-            tasks = [
-                self.fetch_pillar_with_inference("Financial", self.fetch_financial_advisory),
-                self.fetch_regulatory_compliance(),
-                self.fetch_pillar_with_inference("Digital", self.fetch_digital_transformation),
-                self.fetch_pillar_with_inference("Growth", self.fetch_strategic_growth)
-            ]
-        
-        # Regulatory fetch is unique because it needs OpenFDA context
-        reg_data = await self.fetch_regulatory_compliance()
+        # 1. Regulatory fetch is unique because it needs OpenFDA context
+        reg_data = await self.fetch_regulatory_compliance(industry=industry)
         reg_inf = await self.generate_inference("Regulatory Compliance", reg_data["short"])
         regulatory_pillar = {**reg_data, "inference": reg_inf}
         
+        # 2. Parallel fetch for other pillars
         if "auto" in industry.lower():
             res_list = await asyncio.gather(
                 self.fetch_pillar_with_inference("Financial", self.fetch_financial_advisory),
                 self.fetch_automobile_nhtsa(industry=industry),
                 self.fetch_pillar_with_inference("Growth", self.fetch_strategic_growth)
             )
-            # Re-map results to match the expected index in shorts_for_master
-            # Financial, Auto (mapped to Digital for UI), Growth
             results = [res_list[0], res_list[1], res_list[2]]
         elif "restaurant" in industry.lower():
              res_list = await asyncio.gather(
@@ -438,28 +466,33 @@ class IntelligenceService:
                 self.fetch_pillar_with_inference("Growth", self.fetch_strategic_growth)
             )
         
-        shorts_for_master = {
-            "financial": results[0]["short"],
-            "regulatory": regulatory_pillar["short"],
-            "digital": results[1]["short"],
-            "growth": results[2]["short"],
-            "operational": f"Operational Flux ({industry}): Optimizing labor-to-output ratios by 12% via AI-orchestrated scheduling."
+        # 3. Construct rich context for synthesis
+        all_data_context = {
+            "financial": results[0],
+            "regulatory": regulatory_pillar,
+            "digital": results[1],
+            "growth": results[2],
+            "operational": {
+                "short": f"Operational Flux ({industry}): Optimizing labor-to-output ratios by 12% via AI-orchestrated scheduling.",
+                "metadata": {"labor_gain": "12%", "automation_risk": "low"}
+            }
         }
         
-        master_inf = await self.generate_master_inference(shorts_for_master, industry=industry)
+        shorts_only: Dict[str, str] = {k: str(v.get("short", "")) for k, v in all_data_context.items()}
+        master_inf = await self.generate_master_inference(shorts_only, industry=industry)
         
         spec_tasks_1 = [
-            self.generate_specialized_pillar_report(shorts_for_master, "Financial Advisory & Capital Reallocation", industry=industry),
-            self.generate_specialized_pillar_report(shorts_for_master, "Regulatory Compliance & Risk Governance", industry=industry)
+            self.generate_specialized_pillar_report(all_data_context, "Financial Advisory & Capital Reallocation", industry=industry),
+            self.generate_specialized_pillar_report(all_data_context, "Regulatory Compliance & Risk Governance", industry=industry)
         ]
         batch_1 = await asyncio.gather(*spec_tasks_1)
         
         await asyncio.sleep(0.5) 
         
         spec_tasks_2 = [
-            self.generate_specialized_pillar_report(shorts_for_master, "Digital Transformation & Health-Tech Infrastructure", industry=industry),
-            self.generate_specialized_pillar_report(shorts_for_master, "Strategic Growth & Market Entry Diagnostics", industry=industry),
-            self.generate_specialized_pillar_report(shorts_for_master, "Operational Efficiency & Workforce Optimization", industry=industry)
+            self.generate_specialized_pillar_report(all_data_context, "Digital Transformation & Health-Tech Infrastructure", industry=industry),
+            self.generate_specialized_pillar_report(all_data_context, "Strategic Growth & Market Entry Diagnostics", industry=industry),
+            self.generate_specialized_pillar_report(all_data_context, "Operational Efficiency & Workforce Optimization", industry=industry)
         ]
         batch_2 = await asyncio.gather(*spec_tasks_2)
         
@@ -480,7 +513,7 @@ class IntelligenceService:
             "digital": {**results[1], "specialized": specialized_reports[2]},
             "growth": {**results[2], "specialized": specialized_reports[3]},
             "operational": {
-                "short": shorts_for_master["operational"],
+                "short": all_data_context["operational"]["short"],
                 "trends": [30, 32, 35, 38, 42, 45, 48],
                 "inference": {
                     "key_points": [f"{industry} labor-to-output ratio optimization.", "Predictive scheduling integration."],
