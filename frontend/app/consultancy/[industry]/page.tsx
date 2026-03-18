@@ -152,7 +152,7 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
                 <Activity className="w-4 h-4" /> Live Institutional Alpha
               </div>
             </div>
-            <h1 className="text-4xl lg:text-6xl font-black tracking-tighter leading-[0.9] uppercase">
+            <h1 className="text-3xl lg:text-5xl font-black tracking-tighter leading-[0.9] uppercase">
               STRATEGIC <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-200 to-white italic">
                 {params.industry.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())} Intelligence.
@@ -186,7 +186,7 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
              Global Strategic Synthesis
            </h3>
-           <p className="text-base lg:text-lg font-bold leading-relaxed text-white/90 max-w-4xl italic tracking-tight">
+           <p className="text-sm lg:text-base font-bold leading-relaxed text-white/90 max-w-4xl italic tracking-tight">
               {report?.master_inference || "Aggregating cross-pillar intelligence for global optimization..."}
            </p>
         </motion.div>
@@ -204,17 +204,17 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
                 </div>
                 <h4 className="text-[10px] uppercase tracking-[0.6em] text-white/30 font-black mb-8">01. Executive Summary</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-                   <div className="space-y-2">
-                      <span className="text-[9px] text-emerald-500/50 uppercase block tracking-[0.3em] font-black">Friction // Why</span>
-                      <p className="text-xl font-black italic text-white leading-tight">"{activeSpecialized.executive_summary.why}"</p>
-                   </div>
-                   <div className="md:border-l border-white/10 md:pl-8 space-y-2">
-                      <span className="text-[9px] text-white/30 uppercase block tracking-[0.3em] font-black">Logic // What</span>
-                      <p className="text-xl font-black text-white/90 leading-tight">{activeSpecialized.executive_summary.what}</p>
-                   </div>
+                    <div className="space-y-2">
+                       <span className="text-[9px] text-emerald-500/50 uppercase block tracking-[0.3em] font-black">Friction // Why</span>
+                       <p className="text-lg font-black italic text-white leading-tight">"{activeSpecialized.executive_summary.why}"</p>
+                    </div>
+                    <div className="md:border-l border-white/10 md:pl-8 space-y-2">
+                       <span className="text-[9px] text-white/30 uppercase block tracking-[0.3em] font-black">Logic // What</span>
+                       <p className="text-lg font-black text-white/90 leading-tight">{activeSpecialized.executive_summary.what}</p>
+                    </div>
                    <div className="md:border-l border-white/10 md:pl-8 space-y-2">
                       <span className="text-[9px] text-emerald-400 uppercase block tracking-[0.3em] font-black">Alpha // Impact</span>
-                      <p className="text-4xl lg:text-5xl font-black text-emerald-400 leading-none tracking-tighter">
+                      <p className="text-3xl lg:text-4xl font-black text-emerald-400 leading-none tracking-tighter">
                         {activeSpecialized.executive_summary.impact}
                       </p>
                    </div>
@@ -298,7 +298,7 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
                       <div className="space-y-8">
                          <div>
                             <span className="text-[9px] text-white/40 uppercase block mb-3 font-black">Workflow Modernization</span>
-                            <p className="text-2xl font-black italic text-white leading-tight uppercase tracking-tighter">
+                            <p className="text-lg font-black italic text-white leading-tight uppercase tracking-tighter">
                                {activeSpecialized.strategic_recommendations.process_redesign}
                             </p>
                          </div>
