@@ -17,6 +17,8 @@ services:
         sync: false
       - key: REDIS_URL
         sync: false
+      - key: GROQ_API_KEY
+        sync: false
 
   # --- Frontend Web Service (Next.js) ---
   - type: web
@@ -34,3 +36,5 @@ services:
           type: web
           name: market-intel-backend
           property: host
+      - key: NODE_VERSION
+        value: 20
