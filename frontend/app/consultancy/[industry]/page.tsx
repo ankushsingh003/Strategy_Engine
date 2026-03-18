@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { 
   Activity, 
   BrainCircuit, 
@@ -11,6 +11,7 @@ import {
   Settings,
   Database,
   X,
+  ArrowLeft,
   ArrowUpRight,
   Zap
 } from 'lucide-react';
@@ -82,6 +83,7 @@ const MiniChart = ({ data, color }: { data: number[], color: string }) => {
 
 export default function ConsultancyIntelligencePage({ params }: { params: { industry: string } }) {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const capability = searchParams.get('capability');
   const [loading, setLoading] = useState(true);
   const [report, setReport] = useState<IntelligenceData | null>(null);
@@ -90,7 +92,7 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
   useEffect(() => {
     const fetchReport = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/intelligence/full-report');
+        const response = await fetch(`http://localhost:8000/api/intelligence/full-report?industry=${params.industry}`);
         const data = await response.json();
         setReport(data);
       } catch (error) {
@@ -138,12 +140,23 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
       <div className="max-w-7xl mx-auto relative z-10">
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12 border-b border-white/5 pb-8">
           <div className="flex-1">
-            <div className="flex items-center gap-3 text-emerald-400 text-[10px] font-black uppercase tracking-[0.5em] mb-2">
-              <Activity className="w-4 h-4" /> Live Institutional Alpha
+            <div className="flex items-center gap-4 mb-3">
+              <button 
+                onClick={() => router.back()}
+                className="group flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:bg-emerald-500/10 hover:border-emerald-500/30 transition-all duration-300"
+              >
+                <ArrowLeft className="w-4 h-4 text-emerald-400 group-hover:-translate-x-1 transition-transform" />
+                <span className="text-[10px] font-black uppercase tracking-wider text-white/70 group-hover:text-emerald-400">Back</span>
+              </button>
+              <div className="flex items-center gap-3 text-emerald-400 text-[10px] font-black uppercase tracking-[0.5em]">
+                <Activity className="w-4 h-4" /> Live Institutional Alpha
+              </div>
             </div>
             <h1 className="text-4xl lg:text-6xl font-black tracking-tighter leading-[0.9] uppercase">
               STRATEGIC <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-200 to-white italic">{params.industry.replace('-',' ')} Intelligence.</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-200 to-white italic">
+                {params.industry.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())} Intelligence.
+              </span>
             </h1>
           </div>
           
@@ -167,13 +180,13 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
         <motion.div 
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="mb-12 p-8 relative group border-l-[6px] border-emerald-500 bg-gradient-to-r from-emerald-500/10 to-transparent rounded-r-[32px] shadow-xl"
+          className="mb-8 p-6 relative group border-l-[4px] border-emerald-500 bg-gradient-to-r from-emerald-500/10 to-transparent rounded-r-[24px] shadow-lg"
         >
-           <h3 className="text-[11px] font-black uppercase tracking-[0.5em] text-emerald-400 mb-4 flex items-center gap-3">
-             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+           <h3 className="text-[10px] font-black uppercase tracking-[0.5em] text-emerald-400 mb-3 flex items-center gap-3">
+             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
              Global Strategic Synthesis
            </h3>
-           <p className="text-xl lg:text-3xl font-black leading-[1.1] text-white/95 max-w-5xl italic tracking-tight">
+           <p className="text-base lg:text-lg font-bold leading-relaxed text-white/90 max-w-4xl italic tracking-tight">
               {report?.master_inference || "Aggregating cross-pillar intelligence for global optimization..."}
            </p>
         </motion.div>
@@ -182,102 +195,90 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col gap-8 mb-20"
+            className="flex flex-col gap-6 mb-16"
           >
-             {/* 1. Executive Summary */}
-             <div className="bg-gradient-to-br from-emerald-500/20 via-[#0f172a] to-[#010617] border border-emerald-500/30 rounded-[48px] p-12 lg:p-16 shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-16 opacity-5">
-                   <Zap className="w-48 h-48 text-emerald-500" />
+             {/* 1. Executive Summary - COMPACTED */}
+             <div className="bg-gradient-to-br from-emerald-500/10 via-[#0f172a] to-[#010617] border border-emerald-500/20 rounded-[32px] p-8 lg:p-10 shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-10 opacity-5">
+                   <Zap className="w-32 h-32 text-emerald-500" />
                 </div>
-                <h4 className="text-[12px] uppercase tracking-[0.6em] text-white/40 font-black mb-12">01. Executive Summary</h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-16 relative z-10">
-                   <div className="space-y-4">
-                      <span className="text-[11px] text-emerald-500/50 uppercase block tracking-[0.3em] font-black">Institutional Friction // Why</span>
-                      <p className="text-2xl font-black italic text-white leading-[1.2]">"{activeSpecialized.executive_summary.why}"</p>
+                <h4 className="text-[10px] uppercase tracking-[0.6em] text-white/30 font-black mb-8">01. Executive Summary</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+                   <div className="space-y-2">
+                      <span className="text-[9px] text-emerald-500/50 uppercase block tracking-[0.3em] font-black">Friction // Why</span>
+                      <p className="text-xl font-black italic text-white leading-tight">"{activeSpecialized.executive_summary.why}"</p>
                    </div>
-                   <div className="md:border-l border-white/10 md:pl-16 space-y-4">
-                      <span className="text-[11px] text-white/30 uppercase block tracking-[0.3em] font-black">Mitigation Logic // What</span>
-                      <p className="text-2xl font-black text-white/90 leading-[1.2]">{activeSpecialized.executive_summary.what}</p>
+                   <div className="md:border-l border-white/10 md:pl-8 space-y-2">
+                      <span className="text-[9px] text-white/30 uppercase block tracking-[0.3em] font-black">Logic // What</span>
+                      <p className="text-xl font-black text-white/90 leading-tight">{activeSpecialized.executive_summary.what}</p>
                    </div>
-                   <div className="md:border-l border-white/10 md:pl-16 space-y-4">
-                      <span className="text-[11px] text-emerald-400 uppercase block tracking-[0.3em] font-black">Quantified Alpha // Impact</span>
-                      <p className="text-5xl lg:text-6xl font-black text-emerald-400 leading-none tracking-tighter">
+                   <div className="md:border-l border-white/10 md:pl-8 space-y-2">
+                      <span className="text-[9px] text-emerald-400 uppercase block tracking-[0.3em] font-black">Alpha // Impact</span>
+                      <p className="text-4xl lg:text-5xl font-black text-emerald-400 leading-none tracking-tighter">
                         {activeSpecialized.executive_summary.impact}
                       </p>
                    </div>
                 </div>
              </div>
 
-             {/* 2 & 3 Assessment / Audit */}
-             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 bg-[#0f172a] border border-white/10 rounded-[48px] p-12 flex flex-col justify-between shadow-2xl relative">
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-                      <div className="space-y-10">
+             {/* 2, 3 & 4 Assessment / Audit / Gap - COMPACTED */}
+             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2 bg-[#0f172a] border border-white/10 rounded-[32px] p-8 flex flex-col justify-between shadow-xl relative">
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                      <div className="space-y-6">
                          <div>
-                            <h4 className="text-[11px] uppercase tracking-[0.5em] text-white/40 mb-10 font-black">02. Current State</h4>
-                            <span className="text-[10px] text-red-500/50 uppercase block mb-5 font-black tracking-widest">Identified Inefficiencies</span>
-                            <div className="flex flex-wrap gap-3">
+                            <h4 className="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-6 font-black">02. Current State</h4>
+                            <div className="flex flex-wrap gap-2 mb-4">
                                {activeSpecialized.current_state.bottlenecks.map((b, i) => (
-                                  <span key={i} className="text-[11px] bg-red-500/10 border border-red-500/30 text-red-500 px-5 py-2 rounded-2xl font-black uppercase tracking-tight">{b}</span>
+                                  <span key={i} className="text-[9px] bg-red-500/10 border border-red-500/20 text-red-500 px-3 py-1 rounded-xl font-black uppercase">{b}</span>
                                ))}
                             </div>
-                         </div>
-                         <div>
-                            <span className="text-[10px] text-white/30 uppercase block mb-3 font-black tracking-widest">Dynamic Signal Analysis</span>
-                            <p className="text-lg font-bold text-white/70 leading-relaxed italic border-l-2 border-white/10 pl-6">{activeSpecialized.current_state.data_analysis}</p>
+                            <p className="text-base font-bold text-white/60 leading-tight italic border-l-2 border-white/10 pl-4">{activeSpecialized.current_state.data_analysis}</p>
                          </div>
                       </div>
-                      <div className="md:border-l border-white/10 md:pl-16 space-y-10">
+                      <div className="md:border-l border-white/10 md:pl-10 space-y-6">
                          <div>
-                            <h4 className="text-[11px] uppercase tracking-[0.5em] text-white/40 mb-10 font-black">03. ARCHITECTURAL Audit</h4>
-                            <div className="p-8 bg-white/5 rounded-[32px] border border-white/5 shadow-inner mb-10">
-                               <span className="text-[10px] text-white/40 uppercase block mb-3 font-black tracking-widest">ECOSYSTEM READINESS</span>
-                               <p className="text-xl font-black text-emerald-400 leading-tight uppercase leading-[1.1]">{activeSpecialized.tech_audit.ehr_integration}</p>
+                            <h4 className="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-6 font-black">03. ARCHITECTURAL Audit</h4>
+                            <div className="p-4 bg-white/5 rounded-2xl border border-white/5 mb-4">
+                               <span className="text-[9px] text-white/40 uppercase block mb-1 font-black">READINESS</span>
+                               <p className="text-lg font-black text-emerald-400 leading-none uppercase">{activeSpecialized.tech_audit.ehr_integration}</p>
                             </div>
-                            <span className="text-[10px] text-white/30 uppercase block mb-6 font-black tracking-widest">Agentic Opportunities</span>
-                            <div className="space-y-5">
+                            <div className="space-y-2">
                                {activeSpecialized.tech_audit.automation_opportunities.map((opp, i) => (
-                                  <div key={i} className="flex gap-5 items-center group/item">
-                                     <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/20 group-hover/item:bg-emerald-500 transition-all"></div>
-                                     <span className="text-[15px] font-bold text-white/60 group-hover/item:text-white transition-colors">{opp}</span>
+                                  <div key={i} className="flex gap-3 items-center">
+                                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/40"></div>
+                                     <span className="text-[13px] font-bold text-white/60 uppercase">{opp}</span>
                                   </div>
                                ))}
                             </div>
                          </div>
                       </div>
                    </div>
-                   <div className="pt-10 border-t border-white/5 mt-16 flex justify-between items-center">
-                      <span className="text-sm font-mono text-emerald-500 font-black uppercase tracking-[0.3em] italic">{activeSpecialized.current_state.regulatory_status}</span>
-                      <div className="flex items-center gap-3">
-                         <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
-                         <span className="text-[10px] text-white/30 font-black uppercase tracking-widest">Node Node ACTIVE</span>
-                      </div>
+                   <div className="pt-6 border-t border-white/5 mt-8 flex justify-between items-center">
+                      <span className="text-[11px] font-mono text-emerald-500 font-black uppercase tracking-widest">{activeSpecialized.current_state.regulatory_status}</span>
+                      <span className="text-[9px] text-white/20 font-black uppercase">GRID_SECURE</span>
                    </div>
                 </div>
 
-                <div className="bg-[#0b1120] border border-white/10 rounded-[48px] p-12 flex flex-col shadow-2xl">
-                   <h4 className="text-[11px] uppercase tracking-[0.5em] text-white/40 mb-12 font-black font-mono">04. GAP Analysis</h4>
-                   <div className="space-y-12 flex-1">
-                      <div className="relative pl-10 border-l-[3px] border-amber-500/30">
-                         <span className="text-[11px] text-amber-500/60 uppercase block mb-6 font-black tracking-[0.4em] flex items-center gap-3">
-                            <Activity className="w-4 h-4" /> Talent Delta
-                         </span>
-                         <ul className="space-y-5">
+                <div className="bg-[#0b1120] border border-white/10 rounded-[32px] p-8 flex flex-col shadow-xl">
+                   <h4 className="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-8 font-black">04. GAP Analysis</h4>
+                   <div className="space-y-8 flex-1">
+                      <div className="pl-6 border-l-2 border-amber-500/20">
+                         <span className="text-[9px] text-amber-500/60 uppercase block mb-4 font-black">Talent Delta</span>
+                         <ul className="space-y-2">
                             {activeSpecialized.gap_analysis.resource_gaps.map((g, i) => (
-                               <li key={i} className="text-base font-bold text-white/80 leading-tight flex items-start gap-4">
-                                  <span className="text-amber-500/60 mt-2.5 min-w-[7px] h-[7px] bg-amber-500 rounded-full"></span> {g}
+                               <li key={i} className="text-sm font-bold text-white/70 leading-none flex items-center gap-3">
+                                  <div className="w-1 h-1 bg-amber-500 rounded-full"></div> {g}
                                </li>
                             ))}
                          </ul>
                       </div>
-                      <div className="relative pl-10 border-l-[3px] border-purple-500/30">
-                         <span className="text-[11px] text-purple-500/60 uppercase block mb-6 font-black tracking-[0.4em] flex items-center gap-3">
-                            <Database className="w-4 h-4" /> Infra Delta
-                         </span>
-                         <ul className="space-y-5">
+                      <div className="pl-6 border-l-2 border-purple-500/20">
+                         <span className="text-[9px] text-purple-500/60 uppercase block mb-4 font-black">Infra Delta</span>
+                         <ul className="space-y-2">
                             {activeSpecialized.gap_analysis.infrastructure_gaps.map((g, i) => (
-                               <li key={i} className="text-base font-bold text-white/80 leading-tight flex items-start gap-4">
-                                  <span className="text-purple-500/60 mt-2.5 min-w-[7px] h-[7px] bg-purple-500 rounded-full"></span> {g}
+                               <li key={i} className="text-sm font-bold text-white/70 leading-none flex items-center gap-3">
+                                  <div className="w-1 h-1 bg-purple-500 rounded-full"></div> {g}
                                </li>
                             ))}
                          </ul>
@@ -286,37 +287,37 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
                 </div>
              </div>
 
-             {/* 5 Recommendation & Roadmap */}
-             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div className="lg:col-span-8 bg-emerald-500/5 border border-emerald-500/20 rounded-[56px] p-16 relative overflow-hidden shadow-2xl group">
-                   <div className="absolute top-0 right-0 p-16 opacity-5">
-                      <BrainCircuit className="w-80 h-80 text-emerald-500" />
+             {/* 5 Recommendation & Roadmap - COMPACTED */}
+             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div className="lg:col-span-7 bg-emerald-500/5 border border-emerald-500/10 rounded-[40px] p-10 relative overflow-hidden shadow-xl group">
+                   <div className="absolute top-0 right-0 p-10 opacity-5">
+                      <BrainCircuit className="w-48 h-48 text-emerald-500" />
                    </div>
-                   <h4 className="text-[11px] uppercase tracking-[0.6em] text-emerald-400 mb-12 font-black">05. STRATEGIC RECOMMENDATIONS (TO-BE)</h4>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-20 relative z-10">
-                      <div className="space-y-16">
+                   <h4 className="text-[10px] uppercase tracking-[0.6em] text-emerald-400 mb-8 font-black">05. STRATEGIC RECOMMENDATIONS</h4>
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-10 relative z-10">
+                      <div className="space-y-8">
                          <div>
-                            <span className="text-[10px] text-white/40 uppercase block mb-5 tracking-[0.4em] font-black">Workflow Modernization</span>
-                            <p className="text-4xl font-black italic text-white leading-[1.1] uppercase tracking-tighter">
+                            <span className="text-[9px] text-white/40 uppercase block mb-3 font-black">Workflow Modernization</span>
+                            <p className="text-2xl font-black italic text-white leading-tight uppercase tracking-tighter">
                                {activeSpecialized.strategic_recommendations.process_redesign}
                             </p>
                          </div>
-                         <div className="p-10 bg-emerald-500/10 border border-emerald-500/20 rounded-[32px] backdrop-blur-3xl shadow-2xl">
-                            <span className="text-[11px] text-emerald-500 uppercase block mb-5 font-black tracking-[0.4em]">Risk Mitigation Engine</span>
-                            <p className="text-base font-bold text-emerald-200/90 leading-relaxed italic border-l-[3px] border-emerald-500 pl-8 py-2">
+                         <div className="p-6 bg-emerald-500/10 border border-emerald-500/10 rounded-2xl">
+                            <span className="text-[9px] text-emerald-500 uppercase block mb-3 font-black">Risk Mitigation</span>
+                            <p className="text-sm font-bold text-emerald-200/80 leading-tight italic">
                                {activeSpecialized.strategic_recommendations.risk_mitigation}
                             </p>
                          </div>
                       </div>
-                      <div className="space-y-10">
-                         <span className="text-[10px] text-white/40 uppercase block mb-8 tracking-[0.4em] font-black">Institutional Tech Deployment</span>
-                         <div className="grid grid-cols-1 gap-5">
+                      <div className="space-y-4">
+                         <span className="text-[9px] text-white/40 uppercase block mb-4 font-black">Tech Deployment</span>
+                         <div className="grid grid-cols-1 gap-3">
                             {activeSpecialized.strategic_recommendations.tech_stack.map((tech, i) => (
-                               <div key={i} className="flex items-center gap-6 p-6 rounded-[24px] bg-white/5 border border-white/5 hover:border-emerald-500/50 hover:bg-white/10 transition-all cursor-default">
-                                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
-                                     <Zap className="w-6 h-6" />
+                               <div key={i} className="flex items-center gap-4 p-3 rounded-xl bg-white/5 border border-white/5">
+                                  <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                                     <Zap className="w-4 h-4" />
                                   </div>
-                                  <span className="text-sm font-black uppercase tracking-[0.1em] text-white/90">{tech}</span>
+                                  <span className="text-[12px] font-black uppercase text-white/80">{tech}</span>
                                </div>
                             ))}
                          </div>
@@ -324,49 +325,46 @@ export default function ConsultancyIntelligencePage({ params }: { params: { indu
                    </div>
                 </div>
 
-                <div className="lg:col-span-4 bg-[#0f172a] border border-white/10 rounded-[56px] p-12 flex flex-col shadow-2xl relative overflow-hidden">
-                   <h4 className="text-[11px] uppercase tracking-[0.6em] text-white/40 mb-12 font-black">06. EVOLUTIONARY ROADMAP</h4>
-                   <div className="space-y-16 relative flex-1 pr-8">
-                      <div className="absolute left-[27px] top-12 bottom-12 w-px bg-white/10"></div>
+                <div className="lg:col-span-5 bg-[#0f172a] border border-white/10 rounded-[40px] p-10 flex flex-col shadow-xl">
+                   <h4 className="text-[10px] uppercase tracking-[0.6em] text-white/40 mb-8 font-black">06. EVOLUTIONARY ROADMAP</h4>
+                   <div className="space-y-8 relative flex-1">
+                      <div className="absolute left-[19px] top-8 bottom-8 w-px bg-white/10"></div>
                       
                       {[
-                        { id: 'P1', color: 'bg-emerald-500', title: 'Tactical Wins', label: 'phase1' },
-                        { id: 'P2', color: 'bg-blue-500', title: 'Strategic Scale', label: 'phase2' },
+                        { id: 'P1', color: 'bg-emerald-500', title: 'Tactical', label: 'phase1' },
+                        { id: 'P2', color: 'bg-blue-500', title: 'Scale', label: 'phase2' },
                         { id: 'P3', color: 'bg-purple-500', title: 'Optimization', label: 'phase3' }
                       ].map((p, idx) => (
-                        <div key={idx} className="relative pl-20 group">
-                           <div className={`absolute left-0 top-0 w-14 h-14 ${p.color} rounded-[20px] flex items-center justify-center text-[15px] font-black text-[#020617] z-10 shadow-2xl group-hover:scale-110 transition-transform`}>
+                        <div key={idx} className="relative pl-12">
+                           <div className={`absolute left-0 top-0 w-10 h-10 ${p.color} rounded-xl flex items-center justify-center text-xs font-black text-[#020617] z-10`}>
                               {p.id}
                            </div>
-                           <h5 className="text-[11px] font-black opacity-20 uppercase tracking-[0.4em] mb-2">{p.title}</h5>
-                           <p className="text-lg font-black text-white/90 leading-tight uppercase leading-[1.2]">{activeSpecialized.roadmap[p.label as keyof typeof activeSpecialized.roadmap]}</p>
+                           <h5 className="text-[9px] font-black opacity-30 uppercase tracking-widest mb-1">{p.title}</h5>
+                           <p className="text-base font-black text-white/90 leading-tight uppercase">{activeSpecialized.roadmap[p.label as keyof typeof activeSpecialized.roadmap]}</p>
                         </div>
                       ))}
                    </div>
                 </div>
              </div>
 
-             {/* 7 FINANCIAL ROI */}
-             <div className="bg-gradient-to-r from-[#010617] via-[#1e293b] to-[#010617] border border-white/10 rounded-[64px] p-16 mt-8 shadow-2xl relative overflow-hidden">
-                <div className="absolute inset-0 bg-emerald-500/5 opacity-50 blur-[150px] pointer-events-none"></div>
-                <div className="flex flex-col lg:flex-row justify-between items-center gap-20 relative z-10">
-                   <div className="flex-1 text-center lg:text-left">
-                      <h4 className="text-[15px] uppercase tracking-[1em] text-white/20 mb-6 font-black">07. FISCAL PROJECTIONS</h4>
-                      <div className="flex items-center gap-5 justify-center lg:justify-start">
-                         <div className="w-4 h-4 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.8)]"></div>
-                         <p className="text-[13px] font-black text-emerald-500/60 uppercase tracking-[0.6em] font-mono italic">Institutional Validation System: ACTIVE</p>
-                      </div>
+             {/* 7 FINANCIAL ROI - COMPACTED */}
+             <div className="bg-gradient-to-r from-[#010617] via-[#1e293b] to-[#010617] border border-white/10 rounded-[48px] p-10 mt-4 shadow-xl relative overflow-hidden">
+                <div className="absolute inset-0 bg-emerald-500/5 opacity-30 blur-[100px] pointer-events-none"></div>
+                <div className="flex flex-col lg:flex-row justify-between items-center gap-10 relative z-10">
+                   <div className="text-center lg:text-left">
+                      <h4 className="text-[12px] uppercase tracking-[0.8em] text-white/20 mb-3 font-black">07. FISCAL PROJECTIONS</h4>
+                      <p className="text-[10px] font-black text-emerald-500/40 uppercase tracking-widest italic">Institutional Engine: ACTIVE</p>
                    </div>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-24 md:gap-48 shrink-0 px-16 lg:px-24 border-l border-white/10 ml-0 lg:ml-20">
-                      <div className="space-y-4 text-center lg:text-left">
-                         <span className="text-[13px] text-red-500 uppercase block font-black tracking-[0.4em] opacity-60">Operational Waste reduction</span>
-                         <span className="text-7xl lg:text-8xl font-black italic text-red-500 tracking-tighter drop-shadow-[0_0_20px_rgba(239,68,68,0.4)]">
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 shrink-0 px-10 border-l border-white/10 ml-0 lg:ml-12">
+                      <div className="space-y-2 text-center lg:text-left">
+                         <span className="text-[11px] text-red-500 uppercase block font-black opacity-60">Waste reduction</span>
+                         <span className="text-4xl lg:text-5xl font-black italic text-red-500 tracking-tighter">
                             {activeSpecialized.financial_roi.cost_savings}
                          </span>
                       </div>
-                      <div className="space-y-4 text-center lg:text-left">
-                         <span className="text-[13px] text-emerald-500 uppercase block font-black tracking-[0.4em] opacity-60">Net Margin Acceleration</span>
-                         <span className="text-7xl lg:text-8xl font-black italic text-emerald-400 tracking-tighter drop-shadow-[0_0_20px_rgba(52,211,153,0.4)]">
+                      <div className="space-y-2 text-center lg:text-left">
+                         <span className="text-[11px] text-emerald-500 uppercase block font-black opacity-60">Margin Acceleration</span>
+                         <span className="text-4xl lg:text-5xl font-black italic text-emerald-400 tracking-tighter">
                             {activeSpecialized.financial_roi.revenue_growth}
                          </span>
                       </div>

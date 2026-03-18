@@ -35,11 +35,11 @@ app.include_router(ws_signals.router, tags=["Streams"])  # WS routes don't use /
 from backend.services.market_engine.intelligence_service import intelligence_service
 
 @app.get("/api/intelligence/full-report")
-async def get_full_intelligence_report():
+async def get_full_intelligence_report(industry: str = "Medical"):
     """
-    Returns data for all 5 consultancy panels.
+    Returns data for all 5 consultancy panels, grounded in the specified industry.
     """
-    return await intelligence_service.get_full_report()
+    return await intelligence_service.get_full_report(industry=industry)
 
 @app.get("/")
 def read_root():

@@ -14,19 +14,31 @@ const capabilities = [
 ];
 
 const industries = [
-  "Medical"
+  "Medical",
+  "Automobiles"
 ];
 
+const subIndustryData: { [key: string]: string[] } = {
+  "Automobiles": ["Heavy Vehicles", "Light Vehicles", "Three Wheelers"]
+};
+
 export default function AssistanceSection() {
-  const [activeTab, setActiveTab] = useState<'capabilities' | 'industries' | null>(null);
+  const [activeTab, setActiveTab] = useState<'capabilities' | 'industries' | 'subindustries' | null>(null);
   const [selectedCapability, setSelectedCapability] = useState("Capabilities");
   const [selectedIndustry, setSelectedIndustry] = useState("Industries");
+  const [selectedSubIndustry, setSelectedSubIndustry] = useState("Sub-Sectors");
   const router = useRouter();
 
   const handleBeginAnalysis = () => {
     if (selectedCapability !== "Capabilities" && selectedIndustry !== "Industries") {
-      const industryParam = selectedIndustry.toLowerCase().replace(/\s+/g, '-');
-      router.push(`/consultancy/${industryParam}?capability=${encodeURIComponent(selectedCapability)}`);
+      let cluster = selectedIndustry.toLowerCase().replace(/\s+/g, '-');
+      
+      // If Automobiles is selected, append sub-industry for deeper grounding
+      if (selectedIndustry === "Automobiles" && selectedSubIndustry !== "Sub-Sectors") {
+        cluster = `${cluster}-${selectedSubIndustry.toLowerCase().replace(/\s+/g, '-')}`;
+      }
+      
+      router.push(`/consultancy/${cluster}?capability=${encodeURIComponent(selectedCapability)}`);
     }
   };
 
@@ -110,6 +122,7 @@ export default function AssistanceSection() {
                               key={ind}
                               onClick={() => {
                                 setSelectedIndustry(ind);
+                                setSelectedSubIndustry("Sub-Sectors"); // Reset sub-sector on industry change
                                 setActiveTab(null);
                               }}
                               className="w-full text-left px-6 py-3 hover:bg-emerald-50 text-[#143D2C] text-sm font-medium transition-colors"
@@ -122,19 +135,66 @@ export default function AssistanceSection() {
                     )}
                   </AnimatePresence>
                 </div>
+
+                {/* Sub-Industry Selector (Condition: Automobiles) */}
+                {selectedIndustry === "Automobiles" && (
+                   <div className="relative z-10">
+                    <button
+                      onClick={() => setActiveTab(activeTab === 'subindustries' ? null : 'subindustries')}
+                      className={`flex items-center justify-between gap-4 px-6 py-4 rounded-full border border-[#143D2C]/10 bg-slate-50 min-w-[240px] text-[#143D2C] font-semibold transition-all ${activeTab === 'subindustries' ? 'ring-2 ring-emerald-500 bg-white shadow-lg' : 'hover:bg-slate-100'}`}
+                    >
+                      <span>{selectedSubIndustry}</span>
+                      {activeTab === 'subindustries' ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                    </button>
+
+                    <AnimatePresence>
+                      {activeTab === 'subindustries' && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="absolute top-full left-0 mt-2 w-full bg-white rounded-2xl shadow-2xl border border-emerald-100 overflow-hidden"
+                        >
+                          <div className="py-4">
+                            {subIndustryData[selectedIndustry]?.map((sub) => (
+                              <button
+                                key={sub}
+                                onClick={() => {
+                                  setSelectedSubIndustry(sub);
+                                  setActiveTab(null);
+                                }}
+                                className="w-full text-left px-6 py-3 hover:bg-emerald-50 text-[#143D2C] text-sm font-medium transition-colors"
+                              >
+                                {sub}
+                              </button>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                )}
               </div>
 
               {/* Action Button: Begin Strategic Analysis */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ 
-                  opacity: (selectedCapability !== "Capabilities" && selectedIndustry !== "Industries") ? 1 : 0.3,
+                  opacity: (
+                    selectedCapability !== "Capabilities" && 
+                    selectedIndustry !== "Industries" && 
+                    (selectedIndustry !== "Automobiles" || selectedSubIndustry !== "Sub-Sectors")
+                  ) ? 1 : 0.3,
                   y: 0 
                 }}
                 className="mt-12"
               >
                 <button
-                  disabled={selectedCapability === "Capabilities" || selectedIndustry === "Industries"}
+                  disabled={
+                    selectedCapability === "Capabilities" || 
+                    selectedIndustry === "Industries" || 
+                    (selectedIndustry === "Automobiles" && selectedSubIndustry === "Sub-Sectors")
+                  }
                   onClick={handleBeginAnalysis}
                   className="group flex items-center justify-center gap-3 w-full bg-[#143D2C] text-[#A1F28B] py-5 rounded-2xl font-black uppercase tracking-widest text-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed shadow-xl hover:shadow- emerald-900/20"
                 >

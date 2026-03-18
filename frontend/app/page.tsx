@@ -21,6 +21,7 @@ import {
   Database,
   TrendingUp,
   Layers,
+  Car
 } from "lucide-react";
 import { motion, Variants } from "framer-motion";
 import AssistanceSection from "../components/AssistanceSection";
@@ -44,6 +45,7 @@ export default function Home() {
     { id: "media",        name: "Media & Entertainment",   icon: <Film strokeWidth={2.5} className="w-8 h-8" />,             color: "text-[#143D2C] group-hover:text-white", image: "/images/industries/media_entertainment.png" },
     { id: "healthcare",   name: "Healthcare Services",     icon: <HeartPulse strokeWidth={2.5} className="w-8 h-8" />,       color: "text-[#143D2C] group-hover:text-white", image: "/images/industries/healthcare_tech.png" },
     { id: "insurance",    name: "Insurance & FinTech",     icon: <BadgeDollarSign strokeWidth={2.5} className="w-8 h-8" />,  color: "text-[#143D2C] group-hover:text-white", image: "/images/industries/insurance_lic_theme.png" },
+    { id: "automobiles",  name: "Automobiles & Mobility",  icon: <Car strokeWidth={2.5} className="w-8 h-8" />,             color: "text-[#143D2C] group-hover:text-white", image: "/images/industries/automobile_visual.png" },
   ];
 
   const container: Variants = {
