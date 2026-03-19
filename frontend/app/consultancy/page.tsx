@@ -30,7 +30,7 @@ export default function ConsultancyPage() {
   });
 
   useEffect(() => {
-    const session = localStorage.getItem("vantage_session");
+    const session = localStorage.getItem("stratos_session");
     if (!session) {
       router.push("/login?redirect=/consultancy");
     } else {
@@ -276,7 +276,7 @@ export default function ConsultancyPage() {
               <Layers className="text-[#143D2C] w-5 h-5" />
             </div>
             <div className="flex flex-col items-start translate-y-0.5">
-              <span className="text-sm font-black tracking-tighter dark:text-white uppercase leading-none">Vantage <span className="text-[#A1F28B]">AI</span></span>
+              <span className="text-sm font-black tracking-tighter dark:text-white uppercase leading-none">Stratos <span className="text-[#A1F28B]">Strategic</span></span>
               <span className="text-[8px] font-bold text-slate-400 dark:text-slate-300 tracking-[0.2em] uppercase">Private Engagement</span>
             </div>
           </Link>

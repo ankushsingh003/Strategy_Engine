@@ -1,9 +1,9 @@
-# ⚡ Vantage AI — V2 Strategic Intelligence Engine
+# ⚡ Stratos Strategic — V2 Strategic Intelligence Engine
 
 An enterprise-grade, agentic platform for generating real-time strategic consultancy reports, analyzing competitive landscapes, and surfacing predictive financial models using RAG-grounded intelligence and Ensemble ML.
 
 ## 🚀 Overview
-Vantage AI V2 transforms raw API signals from institutional sources (OpenFDA, FMP, CMS, HL7-FHIR, NHTSA, Square) into board-ready strategic intelligence. Using a **Staggered Multi-Pillar Synthesis** architecture combined with **Agentic RAG** and **Ensemble ML Forecasting**, the platform generates high-fidelity strategic audits that bridge the gap between technical data and executive decision-making.
+Stratos Strategic V2 transforms raw API signals from institutional sources (OpenFDA, FMP, CMS, HL7-FHIR, NHTSA, Square) into board-ready strategic intelligence. Using a **Staggered Multi-Pillar Synthesis** architecture combined with **Agentic RAG** and **Ensemble ML Forecasting**, the platform generates high-fidelity strategic audits that bridge the gap between technical data and executive decision-making.
 
 ## 📊 System Working & Flowchart
 

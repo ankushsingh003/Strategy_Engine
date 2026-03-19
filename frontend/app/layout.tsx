@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Vantage AI | Market Intelligence",
+  title: "Stratos Strategic | Market Intelligence",
   description: "Next-generation market trajectory prediction and strategic auditing.",
 };
 

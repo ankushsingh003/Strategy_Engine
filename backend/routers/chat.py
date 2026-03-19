@@ -24,10 +24,10 @@ async def chat_consultant(req: ChatRequest):
     history_text = ""
     if req.history:
         for msg in req.history[-6:]:  # last 3 exchanges for context
-            role_label = "User" if msg.role == "user" else "Vantage AI Consultant"
+            role_label = "User" if msg.role == "user" else "Stratos Strategic Consultant"
             history_text += f"{role_label}: {msg.text}\n"
 
-    system_prompt = f"""You are Vantage AI — an elite market intelligence consultant combining the expertise of McKinsey, BCG, and Goldman Sachs analysts.
+    system_prompt = f"""You are Stratos Strategic — an elite market intelligence consultant combining the expertise of McKinsey, BCG, and Goldman Sachs analysts.
 
 Your knowledge covers all industries: Oil & Gas, Finance & Banking, Pharmaceuticals, Technology, Retail, Real Estate, Aviation, Logistics, Agriculture, Media, Healthcare, Insurance, Coal & Mining, Renewable Energy, Cosmetics, and more.
 
@@ -70,8 +70,8 @@ Vantage AI Consultant:"""
         response = await gemini_client.generate(system_prompt, max_tokens=1500)
         # Clean up if it echoes the role label
         reply = response.strip()
-        if reply.startswith("Vantage AI Consultant:"):
-            reply = reply[len("Vantage AI Consultant:"):].strip()
+        if reply.startswith("Stratos Strategic Consultant:"):
+            reply = reply[len("Stratos Strategic Consultant:"):].strip()
         return {"reply": reply, "status": "success"}
     except Exception as e:
         return {"reply": f"I encountered an error processing your request: {str(e)}", "status": "error"}

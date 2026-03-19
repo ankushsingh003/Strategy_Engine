@@ -303,7 +303,7 @@ export default function Home() {
          <div className="h-px bg-slate-200 dark:bg-white/10 mb-20" />
          <div className="flex flex-col items-center gap-8">
             <span className="text-[10px] font-black text-slate-400 dark:text-white/30 uppercase tracking-[0.5em]">
-              Vantage AI · Global Strategic Intelligence
+              Stratos Strategic · Global Strategic Intelligence
             </span>
             <p className="text-[#143D2C] dark:text-white font-bold text-sm max-w-2xl opacity-60">
               Powered by Gemini 1.5 Flash Enterprise · 4-Model ML Ensemble · Proprietary RAG Vector Engine

@@ -75,7 +75,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      text: "Hello! I'm **Vantage AI** — your elite market intelligence consultant.\n\nI can answer questions about any industry, company financials, competitive landscapes, risks, and strategic opportunities.\n\n**Try asking:**\n- What is ExxonMobil's market position?\n- Compare pharma giants: Pfizer vs Roche\n- Top investment risks in the finance sector",
+      text: "Hello! I'm **Stratos Strategic** — your elite market intelligence consultant.\n\nI can answer questions about any industry, company financials, competitive landscapes, risks, and strategic opportunities.\n\n**Try asking:**\n- What is ExxonMobil's market position?\n- Compare pharma giants: Pfizer vs Roche\n- Top investment risks in the finance sector",
     },
   ]);
   const [input, setInput] = useState("");
@@ -134,7 +134,7 @@ export default function ChatPage() {
               <Bot className="w-5 h-5 text-emerald-400" />
             </div>
             <div>
-              <h1 className="font-bold text-slate-100">Vantage AI Consultant</h1>
+              <h1 className="font-bold text-slate-100">Stratos Strategic Consultant</h1>
               <p className="text-xs text-slate-500 flex items-center gap-1">
                 <Zap className="w-3 h-3 text-emerald-400" /> Powered by Gemini 1.5 Flash · Universal Industry RAG
               </p>

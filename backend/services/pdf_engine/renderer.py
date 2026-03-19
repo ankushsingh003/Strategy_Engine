@@ -52,7 +52,7 @@ class PDFRenderer:
         pdf.set_x(-60)
         pdf.set_font("helvetica", "B", 12)
         pdf.set_text_color(255, 255, 255)
-        pdf.cell(0, 10, "VANTAGE AI", align="R")
+        pdf.cell(0, 10, "STRATOS STRATEGIC", align="R")
         
         # --- MAIN CONTENT ---
         pdf.add_page()
@@ -189,7 +189,7 @@ class PDFRenderer:
         pdf.set_y(-20)
         pdf.set_font("helvetica", "I", 8)
         pdf.set_text_color(148, 163, 184) # Slate 400
-        pdf.cell(0, 10, f"Page {pdf.page_no()} | Vantage AI Confidential", align="C")
+        pdf.cell(0, 10, f"Page {pdf.page_no()} | Stratos Strategic Confidential", align="C")
         
         return pdf.output()
 

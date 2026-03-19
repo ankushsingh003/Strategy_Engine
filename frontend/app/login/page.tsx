@@ -21,7 +21,7 @@ export default function LoginPage() {
     
     // Simulate login delay
     setTimeout(() => {
-      localStorage.setItem("vantage_session", "active");
+      localStorage.setItem("stratos_session", "active");
       router.push(redirectPath);
     }, 1500);
   };
@@ -44,7 +44,7 @@ export default function LoginPage() {
                 <Layers className="text-[#143D2C] w-6 h-6" />
               </div>
               <div className="flex flex-col items-start translate-y-1">
-                <span className="text-xl font-black tracking-tighter dark:text-white uppercase leading-none">Vantage <span className="text-[#A1F28B]">AI</span></span>
+                <span className="text-xl font-black tracking-tighter dark:text-white uppercase leading-none">Stratos <span className="text-[#A1F28B]">Strategic</span></span>
                 <span className="text-[10px] font-bold text-slate-400 dark:text-slate-300 tracking-[0.2em] uppercase">Intelligence</span>
               </div>
             </Link>
@@ -117,13 +117,13 @@ export default function LoginPage() {
               Enterprise Governance Protocol Active
             </div>
             <p className="text-[10px] text-slate-400 font-medium">
-              New to Vantage? <button className="text-emerald-500 font-bold uppercase tracking-wider ml-1 hover:underline">Request Invitation</button>
+              New to Stratos? <button className="text-emerald-500 font-bold uppercase tracking-wider ml-1 hover:underline">Request Invitation</button>
             </p>
           </div>
         </div>
         
         <p className="text-center mt-8 text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] opacity-60">
-          Vantage AI Intelligence System // V2.0.0
+          Stratos Strategic Intelligence System // V2.0.0
         </p>
       </motion.div>
     </main>

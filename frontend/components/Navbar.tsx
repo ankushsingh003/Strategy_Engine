@@ -34,12 +34,12 @@ export default function Navbar() {
   const { scrollY } = useScroll();
 
   useEffect(() => {
-    const session = localStorage.getItem("vantage_session");
+    const session = localStorage.getItem("stratos_session");
     setIsLoggedIn(!!session);
   }, [pathname]);
 
   const handleLogout = () => {
-    localStorage.removeItem("vantage_session");
+    localStorage.removeItem("stratos_session");
     setIsLoggedIn(false);
     window.location.href = "/";
   };
@@ -79,7 +79,7 @@ export default function Navbar() {
                 <Layers className="text-[#143D2C] w-5 h-5" />
               </div>
               <div className="flex flex-col -gap-0.5">
-                <span className="text-base font-black tracking-tighter dark:text-white uppercase leading-none">Vantage <span className="text-[#A1F28B]">AI</span></span>
+                <span className="text-base font-black tracking-tighter dark:text-white uppercase leading-none">Stratos <span className="text-[#A1F28B]">Strategic</span></span>
                 <span className="text-[9px] font-bold text-slate-400 dark:text-slate-300 tracking-[0.15em] uppercase">Intelligence</span>
               </div>
             </Link>
